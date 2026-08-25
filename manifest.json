@@ -6,8 +6,7 @@
   "permissions": [
     "activeTab",
     "storage",
-    "contextMenus",
-    "alarms"
+    "contextMenus"
   ],
   "browser_specific_settings": {
     "gecko": {

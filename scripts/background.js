@@ -167,16 +167,3 @@ api.contextMenus.onClicked.addListener((info, tab) => {
     });
   }
 });
-
-// ========== ALARM: Daily reminder ==========
-api.alarms.create('medscan-daily', { periodInMinutes: 1440 });
-api.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name === 'medscan-daily') {
-    api.storage.local.get('scanStats', (result) => {
-      const stats = result.scanStats || {};
-      if (stats.claimsFound > 0) {
-        console.log(`[MedScan] Daily: ${stats.claimsFound} claims scanned, ${stats.falseFound} false found`);
-      }
-    });
-  }
-});

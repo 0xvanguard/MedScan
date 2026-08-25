@@ -1,5 +1,5 @@
 /**
- * MedScan Content Script
+ * MedScan Content Script (Fixed - No Loop)
  * Scans web pages for medical misinformation
  */
 
@@ -13,14 +13,18 @@
   const CONFIG = {
     enabled: true,
     autoScan: true,
-    minTextLength: 30,
-    scanDelay: 1500, // ms after page load
-    overlayDuration: 8000 // ms to show overlay
+    minTextLength: 50,
+    scanDelay: 2000,
+    cooldownTime: 30000,  // 30 seconds between scans
+    maxScansPerPage: 3    // Max scans per page load
   };
   
   // ========== STATE ==========
   let isScanning = false;
+  let scanCount = 0;
+  let lastScanTime = 0;
   let overlays = [];
+  let scannedElements = new WeakSet(); // Track already scanned elements
   
   // ========== INIT ==========
   function init() {
@@ -46,43 +50,71 @@
         api.storage.local.set({ settings: CONFIG });
         sendResponse({ enabled: CONFIG.enabled });
       }
+      if (request.type === 'SCAN_PAGE') {
+        scanPage();
+        sendResponse({ scanned: true });
+      }
       return true;
     });
     
-    // Scan on significant DOM changes
-    const observer = new MutationObserver((mutations) => {
-      if (CONFIG.enabled && !isScanning) {
-        const hasNewText = mutations.some(m => 
-          m.addedNodes.length > 0 && 
-          Array.from(m.addedNodes).some(n => n.textContent && n.textContent.length > CONFIG.minTextLength)
-        );
-        if (hasNewText) {
-          setTimeout(scanPage, 2000);
-        }
-      }
-    });
-    
-    observer.observe(document.body, { childList: true, subtree: true });
+    // NO MutationObserver - avoid infinite loops
+    // Only scan on initial load and manual trigger
   }
   
   // ========== SCANNER ==========
   function scanPage() {
-    if (isScanning || !CONFIG.enabled) return;
+    // Prevent loops
+    if (isScanning) {
+      console.log('[MedScan] Already scanning, skipping...');
+      return;
+    }
+    
+    if (!CONFIG.enabled) {
+      console.log('[MedScan] Scanning disabled');
+      return;
+    }
+    
+    if (scanCount >= CONFIG.maxScansPerPage) {
+      console.log('[MedScan] Max scans reached for this page');
+      return;
+    }
+    
+    const now = Date.now();
+    if (now - lastScanTime < CONFIG.cooldownTime) {
+      console.log('[MedScan] Cooldown active, skipping...');
+      return;
+    }
+    
     isScanning = true;
+    lastScanTime = now;
+    scanCount++;
+    
+    console.log(`[MedScan] Scanning page (attempt ${scanCount}/${CONFIG.maxScansPerPage})...`);
     
     // Extract text content from page
     const textBlocks = extractTextBlocks();
     
     if (textBlocks.length === 0) {
+      console.log('[MedScan] No text blocks found');
       isScanning = false;
       return;
     }
     
+    console.log(`[MedScan] Found ${textBlocks.length} text blocks to scan`);
+    
     // Scan each block
     let foundClaims = 0;
+    let scannedCount = 0;
     
     for (const block of textBlocks) {
+      // Skip already scanned elements
+      if (scannedElements.has(block.element)) continue;
+      
       if (block.text.length < CONFIG.minTextLength) continue;
+      
+      // Mark as scanned
+      scannedElements.add(block.element);
+      scannedCount++;
       
       api.runtime.sendMessage(
         { type: 'SCAN_TEXT', text: block.text },
@@ -95,26 +127,29 @@
           if (verified.length > 0) {
             foundClaims += verified.length;
             highlightBlock(block.element, verified);
-          }
-          
-          if (potential.length > 0 && verified.length === 0) {
-            // Only show potential claims if no verified matches
-            foundClaims += potential.length;
+            console.log(`[MedScan] Found ${verified.length} claims in block`);
           }
         }
       );
+      
+      // Limit concurrent requests
+      if (scannedCount >= 10) break;
     }
     
-    // Reset scanning state
-    setTimeout(() => { isScanning = false; }, 3000);
+    console.log(`[MedScan] Scanned ${scannedCount} blocks, found ${foundClaims} claims`);
+    
+    // Reset scanning state after delay
+    setTimeout(() => { 
+      isScanning = false; 
+    }, 3000);
   }
   
   // ========== TEXT EXTRACTION ==========
   function extractTextBlocks() {
     const blocks = [];
     const selectors = [
-      'p', 'article', 'section', 'div', 'li', 'h1', 'h2', 'h3', 'h4',
-      'blockquote', 'span', 'td', 'th', 'figcaption', 'aside'
+      'p', 'article', 'section', 'li', 'h1', 'h2', 'h3', 'h4',
+      'blockquote', 'figcaption', 'aside'
     ];
     
     const elements = document.querySelectorAll(selectors.join(', '));
@@ -123,9 +158,10 @@
       // Skip hidden elements
       if (el.offsetParent === null && el.tagName !== 'BODY') continue;
       if (el.closest('.medscan-overlay')) continue; // Skip our own overlays
+      if (scannedElements.has(el)) continue; // Skip already scanned
       
       const text = el.textContent.trim();
-      if (text.length >= CONFIG.minTextLength && text.length < 5000) {
+      if (text.length >= CONFIG.minTextLength && text.length < 2000) {
         blocks.push({ element: el, text });
       }
     }
@@ -135,14 +171,14 @@
     const seen = new Set();
     
     for (const block of blocks) {
-      const hash = block.text.substring(0, 100);
+      const hash = block.text.substring(0, 80);
       if (!seen.has(hash)) {
         seen.add(hash);
         unique.push(block);
       }
     }
     
-    return unique.slice(0, 50); // Limit to prevent performance issues
+    return unique.slice(0, 15); // Limit to prevent performance issues
   }
   
   // ========== HIGHLIGHTING ==========
@@ -192,16 +228,6 @@
     
     element.style.position = 'relative';
     element.appendChild(badge);
-    
-    // Click to show details
-    element.addEventListener('click', (e) => {
-      if (e.target.closest('.medscan-badge')) return;
-      showVerdictOverlay({
-        verified: claims,
-        potential: [],
-        originalText: element.textContent.substring(0, 200)
-      });
-    }, { once: true });
   }
   
   // ========== VERDICT OVERLAY ==========
@@ -232,7 +258,7 @@
         overlay.classList.remove('medscan-visible');
         setTimeout(() => overlay.remove(), 300);
       }
-    }, CONFIG.overlayDuration);
+    }, 8000);
   }
   
   function buildOverlayHTML(results) {
@@ -291,7 +317,6 @@
       </div>
       <div class="medscan-footer">
         <span>MedScan v1.0 — Always consult healthcare professionals</span>
-        <a href="https://medscan.community" target="_blank" class="medscan-link">Learn more</a>
       </div>
     `;
     
