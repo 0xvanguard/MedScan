@@ -819,7 +819,8 @@ const MEDICAL_KNOWLEDGE_BASE = [
     ],
     verdict: "misleading",
     confidence: 0.82,
-    explanation: "El calcio es necesario pero NO 'repara' huesos con osteoporosis. Se necesita vitamina D, ejercicio con peso, y frecuentemente medicación ( bifosfonatos ).",\n    sources: [
+    explanation: "El calcio es necesario pero NO 'repara' huesos con osteoporosis. Se necesita vitamina D, ejercicio con peso, y frecuentemente medicación ( bifosfonatos ).",
+    sources: [
       { name: "IOF", url: "https://www.osteoporosis.foundation/patients/treatment" },
       { name: "NIH", url: "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/" }
     ],
@@ -1283,7 +1284,7 @@ const MEDICAL_KNOWLEDGE_BASE = [
     ],
     verdict: "false",
     confidence: 0.95,
-    explanation: "La intolerancia láctea y la enfermedad celíaca son permanentes. No existen "curas" — requieren evitar los alimentos trigger de por vida.",
+    explanation: "La intolerancia láctea y la enfermedad celíaca son permanentes. No existen 'curas' — requieren evitar los alimentos trigger de por vida.",
     sources: [
       { name: "Celiac Disease Foundation", url: "https://celiac.org/about-celiac-disease/treatment/" },
       { name: "NIH", url: "https://www.niddk.nih.gov/health-information/digestive-diseases/lactose-intolerance" }
@@ -1340,7 +1341,8 @@ const MEDICAL_KNOWLEDGE_BASE = [
     ],
     verdict: "false",
     confidence: 0.92,
-    explanation: "El vitiligo, psoriasis y eccema son condiciones crónicas. No se curan con hielo o aceites. Requieren tratamiento dermatológico (corticoides, inmunomoduladores, biológicos).",\n    sources: [
+    explanation: "El vitiligo, psoriasis y eccema son condiciones crónicas. No se curan con hielo o aceites. Requieren tratamiento dermatológico (corticoides, inmunomoduladores, biológicos).",
+    sources: [
       { name: "AAD", url: "https://www.aad.org/public/diseases/psoriasis/treatment" },
       { name: "National Eczema Association", url: "https://nationaleczema.org/eczema/treatment/" }
     ],
@@ -1434,7 +1436,7 @@ const MEDICAL_KNOWLEDGE_BASE = [
     ],
     verdict: "misleading",
     confidence: 0.78,
-    explanation: "Los hongos psilocibina están en investigación para depresión resistente, pero NO están aprobados como tratamiento. El microdosing no tiene evidencia sólida aún. NO "cura" trauma.",
+    explanation: "Los hongos psilocibina están en investigación para depresión resistente, pero NO están aprobados como tratamiento. El microdosing no tiene evidencia sólida aún. NO 'cura' trauma.",
     sources: [
       { name: "FDA - Psilocybin", url: "https://www.fda.gov/news-events/press-announcements/fda-grants-breakthrough-therapy-designation-psilocybin-therapy-treatment-resistant-depression" },
       { name: "Johns Hopkins", url: "https://hopkinspsychedelic.org/index.html" }
