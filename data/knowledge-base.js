@@ -701,6 +701,800 @@ const MEDICAL_KNOWLEDGE_BASE = [
     severity: "high"
   },
 
+  // ==================== RESPIRATORY DISEASES ====================
+  {
+    id: "RES-001",
+    patterns: [
+      /asma\s+se\s+cura\s+con\s+ejercicio/i,
+      /asma\s+se\s+cura\s+con\s+yoga/i,
+      /inhaladores\s+son\+adictivos/i
+    ],
+    verdict: "false",
+    confidence: 0.92,
+    explanation: "El asma es una condición crónica que NO se cura. Los inhaladores NO son adictivos — son esenciales para controlar la inflamación de las vías respiratorias.",
+    sources: [
+      { name: "GINA Guidelines", url: "https://ginasthma.org/" },
+      { name: "CDC - Asthma", url: "https://www.cdc.gov/asthma/index.html" }
+    ],
+    category: "respiratory",
+    severity: "high"
+  },
+  {
+    id: "RES-002",
+    patterns: [
+      /epoc\s+se\s+cura\s+con\s+plantas/i,
+      /enfisema\s+natural/i,
+      /bronquitis\s+cronica\s+cura/i
+    ],
+    verdict: "false",
+    confidence: 0.95,
+    explanation: "La EPOC y el enfisema son enfermedades pulmonares irreversibles. No existen plantas ni remedios naturales que restauren el tejido pulmonar dañado.",
+    sources: [
+      { name: "GOLD Guidelines", url: "https://goldcopd.org/" },
+      { name: "NIH - COPD", url: "https://www.nhlbi.nih.gov/health/copd" }
+    ],
+    category: "respiratory",
+    severity: "high"
+  },
+
+  // ==================== AUTOIMMUNE ====================
+  {
+    id: "AUT-001",
+    patterns: [
+      /lupus\s+se\s+cura\s+con\s+dieta/i,
+      /lupus\s+reversible\s+con\s+ayuno/i,
+      /enfermedad\s+autoinmune\s+se\s+cura\s+natural/i
+    ],
+    verdict: "false",
+    confidence: 0.95,
+    explanation: "El lupus y las enfermedades autoinmunes NO se curan con dieta. Requieren medicación inmunosupresora. La dieta puede ayudar como complemento, nunca como reemplazo.",
+    sources: [
+      { name: "Lupus Foundation", url: "https://www.lupus.org/answers/understanding-lupus/treatment-options" },
+      { name: "ACR Guidelines", url: "https://rheumatology.org/practice-quality/clinical-support/clinical-practice-guidelines" }
+    ],
+    category: "autoimmune",
+    severity: "high"
+  },
+  {
+    id: "AUT-002",
+    patterns: [
+      /artritis\s+reumatoide\s+cura/i,
+      /artritis\s+se\s+cura\s+con\s+suplementos/i,
+      /artrosis\s+reversible\s+natural/i
+    ],
+    verdict: "false",
+    confidence: 0.93,
+    explanation: "La artritis reumatoide es autoinmune y crónica. La artrosis es degenerativa. Ninguna se cura con suplementos. Los DMARDs y biológicos son los tratamientos efectivos.",
+    sources: [
+      { name: "ACR - RA Treatment", url: "https://rheumatology.org/patients/diseases-conditions/rheumatoid-arthritis" },
+      { name: "Arthritis Foundation", url: "https://www.arthritis.org/diseases/rheumatoid-arthritis" }
+    ],
+    category: "autoimmune",
+    severity: "high"
+  },
+
+  // ==================== NEUROLOGICAL ====================
+  {
+    id: "NEU-001",
+    patterns: [
+      /alzheimer\s+se\s+cura\s+con\s+memoria/i,
+      /dementia\s+reversible\s+con\s+ejercicio/i,
+      /alzheimer\s+se\s+previene\s+con\puzzle/i
+    ],
+    verdict: "misleading",
+    confidence: 0.80,
+    explanation: "El Alzheimer es una enfermedad neurodegenerativa sin cura. El ejercicio y estimulación mental ayudan a reducir el riesgo, pero NO previenen ni curan la enfermedad.",
+    sources: [
+      { name: "Alzheimer's Association", url: "https://www.alz.org/alzheimers-dementia/research_progress/prevention" },
+      { name: "NIH", url: "https://www.nia.nih.gov/health/alzheimers-disease-fact-sheet" }
+    ],
+    category: "neurological",
+    severity: "high"
+  },
+  {
+    id: "NEU-002",
+    patterns: [
+      /parkinson\s+se\s+cura\s+con\s+canamo/i,
+      /parkinson\s+cura\s+natural/i,
+      /temblores\s+se\s+curan\s+con\s+hierbas/i
+    ],
+    verdict: "false",
+    confidence: 0.95,
+    explanation: "El Parkinson es neurodegenerativo. El cannabis puede aliviar algunos síntomas, pero NO cura la enfermedad. La levodopa sigue siendo el tratamiento principal.",
+    sources: [
+      { name: "Michael J. Fox Foundation", url: "https://www.michaeljfox.org/treatment" },
+      { name: "NIH", url: "https://www.ninds.nih.gov/health-information/disorders/parkinsons-disease" }
+    ],
+    category: "neurological",
+    severity: "high"
+  },
+
+  // ==================== BONE/JOINT ====================
+  {
+    id: "BON-001",
+    patterns: [
+      /osteoporosis\s+se\s+cura\s+con\s+calcio/i,
+      /calcio\s+repara\s+huesos/i,
+      /leche\s+cura\s+osteoporosis/i
+    ],
+    verdict: "misleading",
+    confidence: 0.82,
+    explanation: "El calcio es necesario pero NO 'repara' huesos con osteoporosis. Se necesita vitamina D, ejercicio con peso, y frecuentemente medicación ( bifosfonatos ).",\n    sources: [
+      { name: "IOF", url: "https://www.osteoporosis.foundation/patients/treatment" },
+      { name: "NIH", url: "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/" }
+    ],
+    category: "bone",
+    severity: "medium"
+  },
+
+  // ==================== LIVER/KIDNEY ====================
+  {
+    id: "ORG-001",
+    patterns: [
+      /hígado\s+se\s+regenera\s+siempre/i,
+      /hígado\s+graso\s+se\s+cura\s+con\s+jugo/i,
+      /riñón\s+se\s+limpia\s+con\s+agua/i
+    ],
+    verdict: "misleading",
+    confidence: 0.80,
+    explanation: "El hígado SÍ se regenera parcialmente, pero la esteatosis hepática requiere cambio en el estilo de vida. El hígado graso puede progresar a cirrosis si no se trata.",
+    sources: [
+      { name: "AASLD", url: "https://www.aasld.org/practice-guidelines/nonalcoholic-fatty-liver-disease" },
+      { name: "NIDDK", url: "https://www.niddk.nih.gov/health-information/liver-disease/nonalcoholic-fatty-liver-disease-nafld" }
+    ],
+    category: "organs",
+    severity: "medium"
+  },
+  {
+    id: "ORG-002",
+    patterns: [
+      /riñones\s+se\s+reparan\s+natural/i,
+      /insuficiencia\s+renal\s+cura/i,
+      /diálisis\s+se\s+puede\s+evitar\s+con\s+plantas/i
+    ],
+    verdict: "false",
+    confidence: 0.95,
+    explanation: "La enfermedad renal crónica avanzada NO se cura con plantas. La diálisis es necesaria cuando los riñones fallan. Evitarla puede ser mortal.",
+    sources: [
+      { name: "NKF", url: "https://www.kidney.org/kidney-topics/treatment-options" },
+      { name: "KDIGO", url: "https://kdigo.org/guidelines/" }
+    ],
+    category: "organs",
+    severity: "critical"
+  },
+
+  // ==================== THYROID ====================
+  {
+    id: "THY-001",
+    patterns: [
+      /hipotiroidismo\s+se\s+cura\s+con\s+suplementos/i,
+      /tiroides\s+cura\s+natural/i,
+      /hashimoto\s+reversible\s+dieta/i
+    ],
+    verdict: "false",
+    confidence: 0.93,
+    explanation: "El hipotiroidismo (especialmente Hashimoto) es una condición autoinmune crónica. Requiere levotiroxina diaria. No se 'cura' con suplementos.",
+    sources: [
+      { name: "ATA", url: "https://www.thyroid.org/patient-thyroid-problems/what-is-hypothyroidism/" },
+      { name: "NIH", url: "https://www.niddk.nih.gov/health-information/endocrine-diseases/hypothyroidism" }
+    ],
+    category: "thyroid",
+    severity: "high"
+  },
+
+  // ==================== BLOOD PRESSURE ====================
+  {
+    id: "BLO-001",
+    patterns: [
+      /hipertensión\s+se\s+cura\s+con\s+ajo/i,
+      /presión\s+alta\s+cura\s+natural/i,
+      /antihipertensivos\s+son\s+veneno/i
+    ],
+    verdict: "false",
+    confidence: 0.94,
+    explanation: "La hipertensión es crónica. El ajo puede ayudar modestamente, pero NO reemplaza medicación. Suspender antihipertensivos puede causar accidente cerebrovascular.",
+    sources: [
+      { name: "AHA - Hypertension", url: "https://www.heart.org/en/health-topics/high-blood-pressure" },
+      { name: "ACC/AHA Guidelines", url: "https://www.acc.org/clinical-practice-guidelines/blood-pressure-guideline" }
+    ],
+    category: "blood-pressure",
+    severity: "high"
+  },
+
+  // ==================== CHOLESTEROL ====================
+  {
+    id: "CHO-001",
+    patterns: [
+      /colesterol\s+alto\s+se\s+cura\s+con\s+naranja/i,
+      /estatinas\s+son\s+veneno/i,
+      /colesterol\s+bueno\s+vs\s+malo\s+dieta/i
+    ],
+    verdict: "misleading",
+    confidence: 0.82,
+    explanation: "El colesterol alto requiere dieta Y frecuentemente medicación (estatinas). Las estatinas han salvado millones de vidas. Suspenderlas sin indicación médica es peligroso.",
+    sources: [
+      { name: "ACC/AHA", url: "https://www.acc.org/lipid-management" },
+      { name: "NHLBI", url: "https://www.nhlbi.nih.gov/health-topics/high-blood-cholesterol" }
+    ],
+    category: "cholesterol",
+    severity: "high"
+  },
+
+  // ==================== FITNESS/EXERCISE ====================
+  {
+    id: "FIT-001",
+    patterns: [
+      /ejercicio\s+de\s+abdomen\s+quema\s+grasa\s+local/i,
+      /crunches\s+queman\s+panza/i,
+      /sit\s+ups\s+bajan\s+la\s+panza/i
+    ],
+    verdict: "false",
+    confidence: 0.90,
+    explanation: "NO existe localización de grasa. Hacer miles de crunches NO quema grasa del abdomen específicamente. La pérdida de grasa es sistémica y requiere déficit calórico.",
+    sources: [
+      { name: "ACSM", url: "https://www.acsm.org/education-resources/trending-topics-resources/physical-activity-guidelines" },
+      { name: "PubMed", url: "https://pubmed.ncbi.nlm.nih.gov/?term=spot+reduction+fat+loss+exercise" }
+    ],
+    category: "fitness",
+    severity: "medium"
+  },
+  {
+    id: "FIT-002",
+    patterns: [
+      /correr\s+daña\s+rodillas/i,
+      /ejercicio\s+cardio\s+mata\s+corazón/i,
+      /gimnasio\s+abrevia\s+vida/i
+    ],
+    verdict: "false",
+    confidence: 0.92,
+    explanation: "El ejercicio cardiovascular REGULAR fortalece el corazón y puede añadir años de vida. Correr con técnica correcta no daña rodillas. El sedentarismo es mucho más peligroso.",
+    sources: [
+      { name: "British Journal of Sports Medicine", url: "https://bjsm.bmj.com/content/52/21/1373" },
+      { name: "AHA", url: "https://www.heart.org/en/healthy-living/fitness/fitness-basics/why-aerobic-exercise-is-key" }
+    ],
+    category: "fitness",
+    severity: "medium"
+  },
+
+  // ==================== HYDRATION ====================
+  {
+    id: "HYD-001",
+    patterns: [
+      /beber\s+8\s+vasos\s+de\+agua\s+al\s+día/i,
+      /agua\s+alcalina\s+cura/i,
+      /deshidratación\s+causa\s+todo/i
+    ],
+    verdict: "misleading",
+    confidence: 0.80,
+    explanation: "La recomendación de '8 vasos' no tiene base científica sólida. Las necesidades varían. El agua alcalina no cura enfermedades. Beber según sed es suficiente para la mayoría.",
+    sources: [
+      { name: "NASEM", url: "https://nap.nationalacademies.org/catalog/25048/dietary-reference-intakes-for-water-potassium-sodium-chloride-and-sulfate" },
+      { name: "Mayo Clinic", url: "https://www.mayoclinic.org/healthy-lifestyle/nutrition-and-healthy-eating/in-depth/water/art-20044256" }
+    ],
+    category: "hydration",
+    severity: "medium"
+  },
+
+  // ==================== FASTING ====================
+  {
+    id: "FAST-001",
+    patterns: [
+      /ayuno\s+cura\s+todo/i,
+      /ayuno\s+intermitente\s+rejuvenece/i,
+      /ayuno\s+de\s+30\s+días\s+cura/i
+    ],
+    verdict: "false",
+    confidence: 0.90,
+    explanation: "El ayuno prolongado es PELIGROSO. Puede causar deficiencias nutricionales, pérdida muscular, arritmias y hasta muerte. El ayuno intermitente tiene algunos beneficios, pero NO cura enfermedades.",
+    sources: [
+      { name: "NEJM", url: "https://www.nejm.org/doi/full/10.1056/NEJMra1905136" },
+      { name: "NIH", url: "https://www.nia.nih.gov/news/caloric-restriction-and-fasting-diets-how-do-they-work" }
+    ],
+    category: "fasting",
+    severity: "high"
+  },
+
+  // ==================== BREASTFEEDING ====================
+  {
+    id: "BRE-001",
+    patterns: [
+      /leche\s+materna\s+cura\s+todo/i,
+      /lactancia\s+previene\s+todas\s+enfermedades/i,
+      /amamantar\s+cura\s+alergias/i
+    ],
+    verdict: "misleading",
+    confidence: 0.82,
+    explanation: "La leche materna es excelente para el bebé y refuerza su sistema inmunológico, pero NO 'cura todo'. No previene todas las enfermedades ni cura alergias.",
+    sources: [
+      { name: "WHO - Breastfeeding", url: "https://www.who.int/health-topics/breastfeeding" },
+      { name: "AAP", url: "https://www.healthychildren.org/English/ages-stages/baby/breastfeeding/Pages/Breastfeeding-Benefits-Backgrounder.aspx" }
+    ],
+    category: "pregnancy",
+    severity: "medium"
+  },
+
+  // ==================== ELDERLY CARE ====================
+  {
+    id: "ELD-001",
+    patterns: [
+      /deterioro\s+cognitivo\s+es\s+normal\s+envejecer/i,
+      /olvidar\s+es\s+normal\s+de\s+viejo/i,
+      /demencia\s+es\s+normal\s+con\s+la\s+edad/i
+    ],
+    verdict: "false",
+    confidence: 0.93,
+    explanation: "El deterioro cognitivo severo NO es normal del envejecimiento. La demencia es una enfermedad. Olvidos frecuentes, cambios de personalidad y confusión requieren evaluación médica.",
+    sources: [
+      { name: "Alzheimer's Association", url: "https://www.alz.org/alzheimers-dementia/10_signs" },
+      { name: "WHO", url: "https://www.who.int/news-room/fact-sheets/detail/dementia" }
+    ],
+    category: "elderly",
+    severity: "high"
+  },
+
+  // ==================== SUBSTANCE ABUSE ====================
+  {
+    id: "SUB-001",
+    patterns: [
+      /adicción\s+se\s+cura\s+con\s+fuerza\s+de\s+volumen/i,
+      /alcoholismo\s+es\s+falta\s+de\s+voluntad/i,
+      /drogadicción\s+se\s+cura\s+solo/i
+    ],
+    verdict: "false",
+    confidence: 0.96,
+    explanation: "La adicción es una enfermedad cerebral, NO falta de voluntad. Requiere tratamiento profesional (terapia, medicación, grupos de apoyo). Intentar 'solo' puede ser fatal.",
+    sources: [
+      { name: "NIDA", url: "https://nida.nih.gov/publications/drugs-brains-behavior-science-addiction/drug-misuse-addiction" },
+      { name: "WHO", url: "https://www.who.int/news-room/fact-sheets/detail/opioid-overdose" }
+    ],
+    category: "substance",
+    severity: "critical"
+  },
+
+  // ==================== ALLERGIES ====================
+  {
+    id: "ALL-001",
+    patterns: [
+      /alergias\s+se\s+curan\s+con\s+miel/i,
+      /miel\s+cura\s+alergia\s+al\s+polen/i,
+      /alergia\s+se\s+cura\s+exponiéndose/i
+    ],
+    verdict: "misleading",
+    confidence: 0.80,
+    explanation: "La miel NO cura alergias. La inmunoterapia (allergy shots) SÍ puede reducir alergias, pero debe ser supervisada médicamente. La exposición no controlada puede causar anafilaxia.",
+    sources: [
+      { name: "AAAAI", url: "https://www.aaaai.org/tools-for-the-public/allergy,-asthma-immunology-glossary/immunotherapy" },
+      { name: "ACAAI", url: "https://acaai.org/allergies/allergic-conditions/food-pollen-allergies/" }
+    ],
+    category: "allergies",
+    severity: "medium"
+  },
+
+  // ==================== MORE DANGEROUS REMEDIES ====================
+  {
+    id: "REM-007",
+    patterns: [
+      /terapia\s+de\s+chelación\s+cura/i,
+      /quelación\s+desintoxica/i,
+      /metales\s+pesados\s+se\s+curan\s+con\s+quelación/i
+    ],
+    verdict: "misleading",
+    confidence: 0.88,
+    explanation: "La quelación terapéutica es SOLO para envenenamiento por metales pesados diagnosticado. NO 'desintoxica' el cuerpo ni cura enfermedades. Puede causar complicaciones graves.",
+    sources: [
+      { name: "FDA - Chelation", url: "https://www.fda.gov/drugs/drug-safety-and-availability/fda-warns-consumers-about-danger-unapproved-chelation-products" },
+      { name: "NIH - TACT Trial", url: "https://www.nhlbi.nih.gov/news/nihs-contributions/nih-funded-study-finds-chelation-therapy-not-effective-treat-heart-disease" }
+    ],
+    category: "dangerous",
+    severity: "high"
+  },
+  {
+    id: "REM-008",
+    patterns: [
+      /terapia\s+de\s+oxígeno\s+hiperbárico\s+cura/i,
+      /cámara\s+hiperbárica\s+cura\s+cancer/i,
+      /oxígeno\s+a\s+alta\s+presión\s+cura/i
+    ],
+    verdict: "false",
+    confidence: 0.92,
+    explanation: "La oxigenoterapia hiperbárica tiene usos aprobados (heridas, envenenamiento por CO), pero NO cura cancer, autismo ni enfermedades crónicas. Su uso no aprobado es peligroso.",
+    sources: [
+      { name: "FDA", url: "https://www.fda.gov/medical-devices/hyperbaric-oxygen-therapy/fda-warns-about-unapproved-hyperbaric-oxygen-therapy-products" },
+      { name: "Undersea & Hyperbaric Medical Society", url: "https://www.uhms.org/" }
+    ],
+    category: "dangerous",
+    severity: "high"
+  },
+  {
+    id: "REM-009",
+    patterns: [
+      /bak\s+de\s+semiilla\s+cura/i,
+      /B17\s+cura\s+cancer/i,
+      /laetrile\s+cura\s+cancer/i,
+      /amigdalina\s+cura/i
+    ],
+    verdict: "false",
+    confidence: 0.97,
+    explanation: "La B17/laetrile/amigdalina es CIANURO disfrazado. NO cura el cáncer y puede causar envenenamiento por cianuro. La FDA la prohíbe en EE.UU.",
+    sources: [
+      { name: "NCI - Laetrile", url: "https://www.cancer.gov/about-cancer/treatment/cam/hp/laetrile-pdq" },
+      { name: "FDA", url: "https://www.fda.gov/consumers/consumer-updates/danger-dont-drink-miracle-mineral-solution-or-similar-products" }
+    ],
+    category: "dangerous",
+    severity: "critical"
+  },
+
+  // ==================== MORE MENTAL HEALTH ====================
+  {
+    id: "MH-005",
+    patterns: [
+      /TDAH\s+no\s+existe/i,
+      /TDAH\s+es\s+inventado\s+para\s+vender/i,
+      /niños\s+no\s+deben\s+tomar\s+ritalina/i
+    ],
+    verdict: "false",
+    confidence: 0.93,
+    explanation: "El TDAH es un trastorno neurológico real con base genética y neuroquímica. Medicamentos como metilfenidato son seguros y efectivos cuando se usan bajo supervisión médica.",
+    sources: [
+      { name: "AAP - TDAH", url: "https://www.healthychildren.org/English/health-issues/conditions/ADHD/Pages/default.aspx" },
+      { name: "NIMH", url: "https://www.nimh.nih.gov/health/topics/attention-deficit-hyperactivity-disorder-adhd" }
+    ],
+    category: "mental-health",
+    severity: "high"
+  },
+  {
+    id: "MH-006",
+    patterns: [
+      /ansiedad\s+se\s+cura\s+con\s+cbd/i,
+      /cbd\s+cura\s+ansiedad/i,
+      /aceite\s+cannabis\s+cura\s+depresión/i
+    ],
+    verdict: "misleading",
+    confidence: 0.78,
+    explanation: "El CBD puede ayudar modestamente con ansiedad, pero NO cura trastornos de ansiedad. Requiere terapia y/o medicación prescrita. El aceite de cannabis no está regulado.",
+    sources: [
+      { name: "APA", url: "https://www.psychiatry.org/patients-families/anxiety-disorders/what-are-anxiety-disorders" },
+      { name: "NIMH", url: "https://www.nimh.nih.gov/health/topics/anxiety-disorders" }
+    ],
+    category: "mental-health",
+    severity: "medium"
+  },
+
+  // ==================== MORE CANCER SCREENING ====================
+  {
+    id: "CAN-007",
+    patterns: [
+      /mamografía\s+causa\s+cancer/i,
+      /radiación\s+de\s+mamografía\s+peligrosa/i,
+      /no\s+necesito\s+papanicolaou/i
+    ],
+    verdict: "false",
+    confidence: 0.94,
+    explanation: "La mamografía y el Papanicolaou SALVAN vidas detectando cáncer temprano. La radiación es mínima y segura. Evitar estos estudios puede resultar en diagnóstico tardío.",
+    sources: [
+      { name: "USPSTF", url: "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/breast-cancer-screening" },
+      { name: "ACS", url: "https://www.cancer.org/cancer/screening.html" }
+    ],
+    category: "cancer",
+    severity: "high"
+  },
+
+  // ==================== CHRONIC PAIN ====================
+  {
+    id: "PAI-001",
+    patterns: [
+      /dolor\s+crónico\s+es\s+psicológico/i,
+      /fibromialgia\s+no\s+existe/i,
+      /dolor\s+se\s+cura\s+con\s+pensamiento\s+positivo/i
+    ],
+    verdict: "false",
+    confidence: 0.95,
+    explanation: "El dolor crónico y la fibromialgia son condiciones MÉDICAS REALES con base fisiológica. Decir que es 'psicológico' o 'imaginarlo' es invalidante y peligroso.",
+    sources: [
+      { name: "NIH - Chronic Pain", url: "https://www.ninds.nih.gov/health-information/disorders/chronic-pain" },
+      { name: "ACR - Fibromyalgia", url: "https://rheumatology.org/patients/diseases-conditions/fibromyalgia" }
+    ],
+    category: "pain",
+    severity: "high"
+  },
+
+  // ==================== GUT HEALTH ====================
+  {
+    id: "GUT-001",
+    patterns: [
+      /flora\s+intestinal\s+cura\s+todo/i,
+      /probióticos\s+cura\s+depresión/i,
+      /intestino\s+segundo\s+cerebro\s+cura/i
+    ],
+    verdict: "misleading",
+    confidence: 0.80,
+    explanation: "La microbiota intestinal influye en la salud, pero los probióticos NO curan enfermedades. La investigación es prometedora pero aún preliminar.",
+    sources: [
+      { name: "NIH - Probiotics", url: "https://www.nccih.nih.gov/health/probiotics-what-you-need-to-know" },
+      { name: "Nature Reviews Gastroenterology", url: "https://www.nature.com/s41575-022-00699-5" }
+    ],
+    category: "nutrition",
+    severity: "medium"
+  },
+
+  // ==================== SUPERFOODS ====================
+  {
+    id: "SFO-001",
+    patterns: [
+      /superfood\s+cura\s+todo/i,
+      /matcha\s+cura\s+cancer/i,
+      /turmeric\s+cures?\s+inflammation/i,
+      /cúrcuma\s+cura\s+artritis/i
+    ],
+    verdict: "misleading",
+    confidence: 0.82,
+    explanation: "No existe 'superfood' que cure enfermedades. La cúrcuma tiene propiedades antiinflamatorias modestas, pero NO reemplaza medicación para artritis u otras condiciones.",
+    sources: [
+      { name: "Harvard Health", url: "https://www.health.harvard.edu/blog/turmeric-curcumin-really-brain-food-2018012913161" },
+      { name: "NIH", url: "https://www.nccih.nih.gov/health/turmeric" }
+    ],
+    category: "nutrition",
+    severity: "medium"
+  },
+
+  // ==================== INFECTIOUS DISEASES ====================
+  {
+    id: "INF-001",
+    patterns: [
+      /tuberculosis\s+se\s+cura\s+con\s+hierbas/i,
+      /TB\s+natural/i,
+      /tuberculosis\s+sin\s+antibióticos/i
+    ],
+    verdict: "false",
+    confidence: 0.98,
+    explanation: "La tuberculosis requiere antibióticos específicos durante 6-9 meses. Sin tratamiento, la TB mata a ~50% de los infectados. Los remedios naturales NO funcionan.",
+    sources: [
+      { name: "WHO - TB", url: "https://www.who.int/news-room/fact-sheets/detail/tuberculosis" },
+      { name: "CDC", url: "https://www.cdc.gov/tb/topic/treatment/" }
+    ],
+    category: "infectious",
+    severity: "critical"
+  },
+  {
+    id: "INF-002",
+    patterns: [
+      /malaria\s+se\s+cura\s+con\s+aji\s+dulce/i,
+      /paludismo\s+natural/i,
+      /fiebre\s+amarilla\s+cura/i
+    ],
+    verdict: "false",
+    confidence: 0.97,
+    explanation: "La malaria es una emergencia médica que requiere antipalúdicos (artemisinina). Sin tratamiento, puede causar coma y muerte en horas.",
+    sources: [
+      { name: "WHO - Malaria", url: "https://www.who.int/news-room/fact-sheets/detail/malaria" },
+      { name: "CDC", url: "https://www.cdc.gov/malaria/php/treatment/index.html" }
+    ],
+    category: "infectious",
+    severity: "critical"
+  },
+
+  // ==================== MORE ALLERGIES ====================
+  {
+    id: "ALL-002",
+    patterns: [
+      /intolerancia\s+láctea\s+se\s+cura/i,
+      /alergia\s+al\s+gluten\s+se\s+cura/i,
+      /celiaquía\s+reversible/i
+    ],
+    verdict: "false",
+    confidence: 0.95,
+    explanation: "La intolerancia láctea y la enfermedad celíaca son permanentes. No existen "curas" — requieren evitar los alimentos trigger de por vida.",
+    sources: [
+      { name: "Celiac Disease Foundation", url: "https://celiac.org/about-celiac-disease/treatment/" },
+      { name: "NIH", url: "https://www.niddk.nih.gov/health-information/digestive-diseases/lactose-intolerance" }
+    ],
+    category: "allergies",
+    severity: "medium"
+  },
+
+  // ==================== MORE HEART ====================
+  {
+    id: "HEA-003",
+    patterns: [
+      /arritmia\s+se\s+cura\s+con\s+ejercicio/i,
+      /taquicardia\s+natural/i,
+      /fibrilación\s+auricular\s+cura/i
+    ],
+    verdict: "false",
+    confidence: 0.94,
+    explanation: "Las arritmias son trastornos del ritmo cardíaco que requieren tratamiento médico (medicación, ablación, marcapasos). NO se curan con ejercicio solo.",
+    sources: [
+      { name: "AHA - Arrhythmia", url: "https://www.heart.org/en/health-topics/arrhythmia" },
+      { name: "ACC", url: "https://www.acc.org/Latest-in-Cardiology/ten-points-to-remember/2020/02/14/01/41/2019-acc-aha-hrs-guideline-for-af" }
+    ],
+    category: "heart",
+    severity: "high"
+  },
+
+  // ==================== MORE DIABETES ====================
+  {
+    id: "DIA-004",
+    patterns: [
+      /insulina\s+se\s+puede\s+dejar\s+con\s+dieta/i,
+      /diabetes\s+tipo\s+1\s+cura\s+natural/i,
+      /tipo\s+1\s+se\s+cura\s+con\s+yoga/i
+    ],
+    verdict: "false",
+    confidence: 0.98,
+    explanation: "La diabetes tipo 1 es autoinmune — el cuerpo destruye las células beta. Requiere insulina de POR VIDA. No existe cura natural. Dejar la insulina es POTENCIALMENTE MORTAL.",
+    sources: [
+      { name: "ADA - Type 1", url: "https://diabetes.org/about-diabetes/type-1-diabetes" },
+      { name: "JDRF", url: "https://www.jdrf.org/t1d-resources/about/" }
+    ],
+    category: "diabetes",
+    severity: "critical"
+  },
+
+  // ==================== MORE SKIN ====================
+  {
+    id: "SKI-002",
+    patterns: [
+      /vitiligo\s+se\s+cura\s+con\s+hielo/i,
+      /psoriasis\s+cura\s+natural/i,
+      /eccema\s+se\s+cura\s+con\s+aceite/i
+    ],
+    verdict: "false",
+    confidence: 0.92,
+    explanation: "El vitiligo, psoriasis y eccema son condiciones crónicas. No se curan con hielo o aceites. Requieren tratamiento dermatológico (corticoides, inmunomoduladores, biológicos).",\n    sources: [
+      { name: "AAD", url: "https://www.aad.org/public/diseases/psoriasis/treatment" },
+      { name: "National Eczema Association", url: "https://nationaleczema.org/eczema/treatment/" }
+    ],
+    category: "skin",
+    severity: "medium"
+  },
+
+  // ==================== MORE EYE ====================
+  {
+    id: "EYE-002",
+    patterns: [
+      /glaucoma\s+se\s+cura\s+con\s+plantas/i,
+      /cataratas\s+reversible\s+natural/i,
+      /degeneración\s+macular\s+cura/i
+    ],
+    verdict: "false",
+    confidence: 0.96,
+    explanation: "El glaucoma, cataratas y degeneración macular son enfermedades oculares graves. Las cataratas se tratan con cirugía. El glaucoma requiere gotas prescritas. NO existen curas naturales.",
+    sources: [
+      { name: "AAO", url: "https://www.aao.org/eye-health/diseases/glaucoma-treatment" },
+      { name: "BrightFocus Foundation", url: "https://www.brightfocus.org/macular-degeneration" }
+    ],
+    category: "eye-care",
+    severity: "high"
+  },
+
+  // ==================== MORE STI ====================
+  {
+    id: "STI-002",
+    patterns: [
+      /gonorrea\s+cura\s+natural/i,
+      /sífilis\s+se\s+cura\s+con\s+plantas/i,
+      /clamidia\s+cura\s+hierbas/i
+    ],
+    verdict: "false",
+    confidence: 0.97,
+    explanation: "Las ETS bacterianas (gonorrea, sífilis, clamidia) se curan con antibióticos. Sin tratamiento pueden causar infertilidad, daño orgánico y muerte. Los remedios naturales NO funcionan.",
+    sources: [
+      { name: "CDC - STD Treatment", url: "https://www.cdc.gov/std/treatment-guidelines/default.htm" },
+      { name: "WHO", url: "https://www.who.int/news-room/fact-sheets/detail/sexually-transmitted-infections-(stis)" }
+    ],
+    category: "sti",
+    severity: "high"
+  },
+
+  // ==================== MORE BLOOD PRESSURE ====================
+  {
+    id: "BLO-002",
+    patterns: [
+      /presión\s+baja\s+se\s+cura\s+con\s+sal/i,
+      /hipotensión\s+ortostática\s+natural/i,
+      /presión\s+baja\s+no\s+es\s+peligrosa/i
+    ],
+    verdict: "misleading",
+    confidence: 0.82,
+    explanation: "La hipotensión puede ser peligrosa (desmayos, lesiones, mareos). Aumentar la sal sin supervisión médica puede causar problemas. Requiere evaluación médica.",
+    sources: [
+      { name: "AHA", url: "https://www.heart.org/en/health-topics/high-blood-pressure/understanding-blood-pressure-readings" },
+      { name: "Mayo Clinic", url: "https://www.mayoclinic.org/diseases-conditions/hypotension/symptoms-causes/syc-20379925" }
+    ],
+    category: "blood-pressure",
+    severity: "medium"
+  },
+
+  // ==================== MORE WOUND CARE ====================
+  {
+    id: "WOU-001",
+    patterns: [
+      /heridas\s+se\s+curan\s+con\s+miel/i,
+      /sutura\s+se\s+puede\s+saltar/i,
+      /herida\s+grande\s+casa/i
+    ],
+    verdict: "misleading",
+    confidence: 0.80,
+    explanation: "La miel medicinal puede ayudar en heridas leves, pero heridas profundas o grandes requieren sutura médica. Intentar cerrar heridas en casa puede causar infección.",
+    sources: [
+      { name: "AAEM", url: "https://www.acep.org/clinical-resources/clinical-policies/clinical-policies-backgrounders/wound-care" },
+      { name: "Mayo Clinic", url: "https://www.mayoclinic.org/first-aid/first-aid-wounds/basics/art-20056673" }
+    ],
+    category: "wound-care",
+    severity: "medium"
+  },
+
+  // ==================== FINAL CLAIMS TO REACH 100 ====================
+  {
+    id: "FIN-001",
+    patterns: [
+      /hongos\s+medicinales\s+cura\s+todo/i,
+      /microdosing\s+cura\s+depresión/i,
+      /hongos\s+psilocibina\s+cura\s+trauma/i
+    ],
+    verdict: "misleading",
+    confidence: 0.78,
+    explanation: "Los hongos psilocibina están en investigación para depresión resistente, pero NO están aprobados como tratamiento. El microdosing no tiene evidencia sólida aún. NO "cura" trauma.",
+    sources: [
+      { name: "FDA - Psilocybin", url: "https://www.fda.gov/news-events/press-announcements/fda-grants-breakthrough-therapy-designation-psilocybin-therapy-treatment-resistant-depression" },
+      { name: "Johns Hopkins", url: "https://hopkinspsychedelic.org/index.html" }
+    ],
+    category: "supplements",
+    severity: "medium"
+  },
+  {
+    id: "FIN-002",
+    patterns: [
+      /autismo\s+se\s+cura\s+con\s+bleach/i,
+      /autism\s+cures?\s+bleach/i,
+      /CD\s+protocol\s+autism/i,
+      /MMS\s+autism/i
+    ],
+    verdict: "false",
+    confidence: 0.99,
+    explanation: "Darle lejía/cloro (MMS) a un niño con autismo es ABUSO INFANTIL y puede ser MORTAL. La FDA ha emitido advertencias severas. NO existen curas para el autismo.",
+    sources: [
+      { name: "FDA - MMS Warning", url: "https://www.fda.gov/consumers/consumer-updates/danger-dont-drink-miracle-mineral-solution-or-similar-products" },
+      { name: "Autism Speaks", url: "https://www.autismspeaks.org/autism-diagnosis/treatments" }
+    ],
+    category: "dangerous",
+    severity: "critical"
+  },
+  {
+    id: "FIN-003",
+    patterns: [
+      /electroshock\s+cura\s+todo/i,
+      /terapia\s+electroconvulsiva\s+peligrosa/i,
+      /ECT\s+es\tortura/i
+    ],
+    verdict: "misleading",
+    confidence: 0.82,
+    explanation: "La terapia electroconvulsiva (ECT) moderna es SEGURA y efectiva para depresión severa resistente. NO es como en las películas. Se hace bajo anestesia general.",
+    sources: [
+      { name: "APA - ECT", url: "https://www.psychiatry.org/patients-families/ect" },
+      { name: "NIMH", url: "https://www.nimh.nih.gov/health/topics/mental-health-treatments/electroconvulsive-therapy" }
+    ],
+    category: "mental-health",
+    severity: "medium"
+  },
+  {
+    id: "FIN-004",
+    patterns: [
+      /lobotomy\s+cura\s+locura/i,
+      /lobotomía\s+tratamiento/i,
+      /psicocirugía\s+moderna/i
+    ],
+    verdict: "false",
+    confidence: 0.99,
+    explanation: "La lobotomía es un procedimiento OBSOLETO y DESCARTADO que causaba daño cerebral severo. NO se practica desde los años 1960s. Los tratamientos modernos son mucho más seguros y efectivos.",
+    sources: [
+      { name: "NIMH", url: "https://www.nimh.nih.gov/health/topics/mental-health-treatments" },
+      { name: "APA History", url: "https://www.psychiatry.org/psychiatry/practice/professional-topics/ect" }
+    ],
+    category: "mental-health",
+    severity: "high"
+  },
+
   // ==================== ORIGINAL CLAIMS (VAX-001 to GEN-001) ====================
   {
     id: "VAX-001",
