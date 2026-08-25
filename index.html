@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MedScan — Medical Misinformation Detector</title>
+  <meta name="description" content="Free Chrome & Firefox extension that detects medical misinformation in real-time with evidence-based verdicts from WHO, CDC, NIH.">
+  <meta property="og:title" content="MedScan — Medical Misinformation Detector">
+  <meta property="og:description" content="Free Chrome & Firefox extension that detects medical misinformation in real-time.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://0xvanguard.github.io/MedScan">
+  <link rel="icon" type="image/png" href="icons/icon128.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0e1a;
+      --bg2: #0f1729;
+      --bg3: #161e33;
+      --card: #1a2340;
+      --border: #1e2d4a;
+      --text: #e2e8f0;
+      --text2: #94a3b8;
+      --blue: #3b82f6;
+      --indigo: #6366f1;
+      --cyan: #22d3ee;
+      --green: #22c55e;
+      --yellow: #f59e0b;
+      --red: #ef4444;
+      --gradient: linear-gradient(135deg, #3b82f6, #6366f1, #8b5cf6);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ========== ANIMATIONS ========== */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+    }
+
+    .animate-in {
+      animation: slideUp 0.6s ease forwards;
+      opacity: 0;
+    }
+
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+
+    /* ========== NAV ========== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(10, 14, 26, 0.8);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 800;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .nav-logo img { width: 32px; height: 32px; }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      background: var(--gradient);
+      color: white !important;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .nav-cta:hover { opacity: 0.9; }
+
+    /* ========== HERO ========== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 20px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 50%);
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--blue);
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    .hero h1 {
+      font-size: clamp(40px, 7vw, 80px);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 .gradient {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      color: var(--text2);
+      max-width: 600px;
+      margin-bottom: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn {
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--gradient);
+      color: white;
+      box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(59, 130, 246, 0.5);
+    }
+
+    .btn-secondary {
+      background: var(--card);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg3);
+      transform: translateY(-2px);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      margin-top: 60px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat-number {
+      font-size: 32px;
+      font-weight: 800;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-stat-label {
+      font-size: 13px;
+      color: var(--text2);
+      margin-top: 4px;
+    }
+
+    /* ========== FEATURES ========== */
+    .section {
+      padding: 100px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 40px;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      font-size: 18px;
+      color: var(--text2);
+      max-width: 600px;
+      margin-bottom: 60px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      transition: all 0.3s;
+    }
+
+    .feature-card:hover {
+      border-color: var(--blue);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(59, 130, 246, 0.15);
+    }
+
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .feature-icon.blue { background: rgba(59, 130, 246, 0.15); }
+    .feature-icon.green { background: rgba(34, 197, 94, 0.15); }
+    .feature-icon.yellow { background: rgba(245, 158, 11, 0.15); }
+    .feature-icon.red { background: rgba(239, 68, 68, 0.15); }
+    .feature-icon.purple { background: rgba(139, 92, 246, 0.15); }
+    .feature-icon.cyan { background: rgba(34, 211, 238, 0.15); }
+
+    .feature-card h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--text2);
+      line-height: 1.7;
+    }
+
+    /* ========== HOW IT WORKS ========== */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 40px;
+    }
+
+    .step {
+      text-align: center;
+      padding: 40px 24px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      position: relative;
+    }
+
+    .step-number {
+      width: 48px;
+      height: 48px;
+      background: var(--gradient);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+      color: white;
+      margin: 0 auto 20px;
+    }
+
+    .step h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .step p {
+      font-size: 14px;
+      color: var(--text2);
+      line-height: 1.7;
+    }
+
+    /* ========== CATEGORIES ========== */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .category-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .category-card:hover {
+      border-color: var(--blue);
+      transform: translateY(-2px);
+    }
+
+    .category-icon {
+      font-size: 36px;
+      margin-bottom: 12px;
+    }
+
+    .category-card h4 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .category-card p {
+      font-size: 12px;
+      color: var(--text2);
+    }
+
+    /* ========== DEMO ========== */
+    .demo-container {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 40px;
+      margin-top: 40px;
+    }
+
+    .demo-browser {
+      background: var(--bg);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .demo-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .demo-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .demo-dot.red { background: #ef4444; }
+    .demo-dot.yellow { background: #f59e0b; }
+    .demo-dot.green { background: #22c55e; }
+
+    .demo-url {
+      flex: 1;
+      margin-left: 12px;
+      padding: 6px 12px;
+      background: var(--bg3);
+      border-radius: 6px;
+      font-size: 12px;
+      color: var(--text2);
+    }
+
+    .demo-content {
+      padding: 32px;
+    }
+
+    .demo-text {
+      font-size: 16px;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .demo-highlight {
+      border-left: 4px solid var(--red);
+      padding: 16px 20px;
+      background: rgba(239, 68, 68, 0.05);
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 16px;
+    }
+
+    .demo-verdict {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .demo-verdict.false {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--red);
+    }
+
+    .demo-explanation {
+      font-size: 14px;
+      color: var(--text2);
+      line-height: 1.7;
+    }
+
+    .demo-sources {
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--blue);
+    }
+
+    /* ========== PRIVACY ========== */
+    .privacy-card {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 211, 238, 0.1));
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      border-radius: 20px;
+      padding: 48px;
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      margin-top: 60px;
+    }
+
+    .privacy-icon {
+      font-size: 64px;
+      flex-shrink: 0;
+    }
+
+    .privacy-content h3 {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .privacy-content p {
+      font-size: 16px;
+      color: var(--text2);
+      line-height: 1.7;
+    }
+
+    .privacy-list {
+      list-style: none;
+      margin-top: 16px;
+    }
+
+    .privacy-list li {
+      padding: 6px 0;
+      font-size: 14px;
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ========== CTA ========== */
+    .cta-section {
+      text-align: center;
+      padding: 100px 40px;
+      position: relative;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-section h2 {
+      font-size: 48px;
+      font-weight: 900;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .cta-section p {
+      font-size: 18px;
+      color: var(--text2);
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    /* ========== FOOTER ========== */
+    footer {
+      padding: 40px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-left {
+      font-size: 14px;
+      color: var(--text2);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      color: var(--text2);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--text); }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      nav { padding: 12px 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 100px 20px 60px; }
+      .hero h1 { font-size: 36px; }
+      .hero-buttons { flex-direction: column; width: 100%; }
+      .btn { width: 100%; justify-content: center; }
+      .hero-stats { flex-direction: column; gap: 24px; }
+      .section { padding: 60px 20px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .steps { grid-template-columns: 1fr; }
+      .privacy-card { flex-direction: column; text-align: center; }
+      .footer-content { flex-direction: column; gap: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== NAV ========== -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <img src="icons/icon128.png" alt="MedScan">
+      MedScan
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#categories">Categories</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#download" class="nav-cta">Download Free</a>
+    </div>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero">
+    <div class="hero-badge animate-in">
+      <span class="dot"></span>
+      Free & Open Source
+    </div>
+    <h1 class="animate-in delay-1">
+      Stop Medical<br>
+      <span class="gradient">Misinformation</span>
+    </h1>
+    <p class="hero-sub animate-in delay-2">
+      Chrome & Firefox extension that detects medical misinformation in real-time 
+      and shows evidence-based verdicts from WHO, CDC, NIH & PubMed.
+    </p>
+    <div class="hero-buttons animate-in delay-3">
+      <a href="#download" class="btn btn-primary">
+        ⬇️ Download for Chrome
+      </a>
+      <a href="#download" class="btn btn-secondary">
+        🦊 Download for Firefox
+      </a>
+    </div>
+    <div class="hero-stats animate-in delay-4">
+      <div class="hero-stat">
+        <div class="hero-stat-number">20+</div>
+        <div class="hero-stat-label">Verified Claims</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">8</div>
+        <div class="hero-stat-label">Categories</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">5+</div>
+        <div class="hero-stat-label">Trusted Sources</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-number">0</div>
+        <div class="hero-stat-label">Data Collected</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FEATURES ========== -->
+  <section class="section" id="features">
+    <div class="section-label">✨ Features</div>
+    <h2 class="section-title">Everything you need to stay safe</h2>
+    <p class="section-desc">
+      MedScan works silently in the background, protecting you from medical misinformation 
+      as you browse the web.
+    </p>
+    <div class="features-grid">
+      <div class="feature-card animate-in">
+        <div class="feature-icon blue">🔍</div>
+        <h3>Auto-Scan Pages</h3>
+        <p>Automatically detects medical claims as you browse. No action needed — just install and forget.</p>
+      </div>
+      <div class="feature-card animate-in delay-1">
+        <div class="feature-icon red">❌</div>
+        <h3>Instant Verdicts</h3>
+        <p>Color-coded badges show you instantly: red for false, yellow for misleading, blue for unverified.</p>
+      </div>
+      <div class="feature-card animate-in delay-2">
+        <div class="feature-icon green">📚</div>
+        <h3>Trusted Sources</h3>
+        <p>Every verdict links to WHO, CDC, NIH, PubMed, and FDA — so you can verify for yourself.</p>
+      </div>
+      <div class="feature-card animate-in delay-3">
+        <div class="feature-icon yellow">📊</div>
+        <h3>Scan Dashboard</h3>
+        <p>Track how many claims you've encountered, how many were false, and your scan history.</p>
+      </div>
+      <div class="feature-card animate-in delay-4">
+        <div class="feature-icon purple">🖱️</div>
+        <h3>Right-Click Analysis</h3>
+        <p>Selected suspicious text? Right-click and choose "MedScan: Analyze this text" for instant verdict.</p>
+      </div>
+      <div class="feature-card animate-in">
+        <div class="feature-icon cyan">🔒</div>
+        <h3>100% Private</h3>
+        <p>All processing happens locally. No data leaves your browser. No tracking. No analytics.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== HOW IT WORKS ========== -->
+  <section class="section" id="how-it-works">
+    <div class="section-label">🚀 How It Works</div>
+    <h2 class="section-title">Up and running in 60 seconds</h2>
+    <p class="section-desc">
+      Three simple steps to protect yourself and your family from medical misinformation.
+    </p>
+    <div class="steps">
+      <div class="step animate-in">
+        <div class="step-number">1</div>
+        <h3>Download</h3>
+        <p>Download MedScan from the Chrome Web Store or Firefox Add-ons. It's completely free.</p>
+      </div>
+      <div class="step animate-in delay-1">
+        <div class="step-number">2</div>
+        <h3>Install</h3>
+        <p>Click "Add to Chrome" or "Load Temporary Add-on" — takes less than 10 seconds.</p>
+      </div>
+      <div class="step animate-in delay-2">
+        <div class="step-number">3</div>
+        <h3>Browse Safely</h3>
+        <p>MedScan automatically scans every page you visit and flags suspicious medical claims.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CATEGORIES ========== -->
+  <section class="section" id="categories">
+    <div class="section-label">🛡️ Categories</div>
+    <h2 class="section-title">What MedScan detects</h2>
+    <p class="section-desc">
+      Our knowledge base covers the most dangerous categories of medical misinformation.
+    </p>
+    <div class="categories-grid">
+      <div class="category-card">
+        <div class="category-icon">💉</div>
+        <h4>Vaccines</h4>
+        <p>Autism myths, microchips, 5G conspiracy</p>
+      </div>
+      <div class="category-card">
+        <div class="category-icon">🎗️</div>
+        <h4>Cancer</h4>
+        <p>Baking soda cures, chemo dangers, sugar myths</p>
+      </div>
+      <div class="category-card">
+        <div class="category-icon">🦠</div>
+        <h4>COVID-19</h4>
+        <p>Ivermectin, plandemic, flu comparisons</p>
+      </div>
+      <div class="category-card">
+        <div class="category-icon">⚠️</div>
+        <h4>Dangerous Remedies</h4>
+        <p>MMS, colloidal silver, bleach cures</p>
+      </div>
+      <div class="category-card">
+        <div class="category-icon">🧠</div>
+        <h4>Mental Health</h4>
+        <p>Depression myths, medication fear</p>
+      </div>
+      <div class="category-card">
+        <div class="category-icon">🍎</div>
+        <h4>Nutrition</h4>
+        <p>Detox lies, gluten-autism myths</p>
+      </div>
+      <div class="category-card">
+        <div class="category-icon">💊</div>
+        <h4>Antibiotics</h4>
+        <p>Wrong usage, resistance myths</p>
+      </div>
+      <div class="category-card">
+        <div class="category-icon">🚨</div>
+        <h4>Emergency</h4>
+        <p>"Don't call ambulance", home treatment</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== DEMO ========== -->
+  <section class="section">
+    <div class="section-label">👁️ See It In Action</div>
+    <h2 class="section-title">Real-time detection</h2>
+    <p class="section-desc">
+      Here's how MedScan looks when it detects misinformation on a web page.
+    </p>
+    <div class="demo-container">
+      <div class="demo-browser">
+        <div class="demo-bar">
+          <div class="demo-dot red"></div>
+          <div class="demo-dot yellow"></div>
+          <div class="demo-dot green"></div>
+          <div class="demo-url">health-blog-fake.com/natural-cures</div>
+        </div>
+        <div class="demo-content">
+          <p class="demo-text">
+            "Did you know that <strong>baking soda can cure cancer</strong>? Big pharma doesn't want you 
+            to know about this simple alkaline treatment that has helped thousands..."
+          </p>
+          <div class="demo-highlight">
+            <div class="demo-verdict">❌ FALSE</div>
+            <p class="demo-explanation">
+              No scientific evidence exists that baking soda cures cancer. The American Cancer Society 
+              warns against using baking soda as a cancer treatment. Tumors create their own acidic 
+              microenvironment that cannot be altered by diet.
+            </p>
+            <div class="demo-sources">
+              📎 American Cancer Society · 📎 National Cancer Institute · 📎 PubMed
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PRIVACY ========== -->
+  <section class="section" id="privacy">
+    <div class="privacy-card">
+      <div class="privacy-icon">🔒</div>
+      <div class="privacy-content">
+        <h3>Your privacy is absolute</h3>
+        <p>
+          MedScan was built with privacy as the foundation. Everything happens on your device. 
+          We don't collect, store, or transmit any data. Ever.
+        </p>
+        <ul class="privacy-list">
+          <li>✅ All processing happens locally in your browser</li>
+          <li>✅ No data sent to any server</li>
+          <li>✅ No analytics or tracking</li>
+          <li>✅ No account required</li>
+          <li>✅ No cookies used</li>
+          <li>✅ Open source — verify the code yourself</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== DOWNLOAD ========== -->
+  <section class="section" id="download" style="text-align: center;">
+    <div class="section-label">⬇️ Download</div>
+    <h2 class="section-title">Get MedScan — It's Free</h2>
+    <p class="section-desc" style="margin: 0 auto 40px;">
+      Protect yourself and your family from medical misinformation. 
+      Available for Chrome and Firefox.
+    </p>
+    <div class="hero-buttons" style="justify-content: center;">
+      <a href="https://github.com/0xvanguard/MedScan" class="btn btn-primary" target="_blank">
+        ⬇️ Download for Chrome
+      </a>
+      <a href="https://github.com/0xvanguard/MedScan/tree/main/firefox" class="btn btn-secondary" target="_blank">
+        🦊 Download for Firefox
+      </a>
+    </div>
+  </section>
+
+  <!-- ========== CTA ========== -->
+  <section class="cta-section">
+    <h2>Protect Health,<br><span class="gradient">One Scan at a Time</span></h2>
+    <p>Join the fight against medical misinformation. Every scan makes a difference.</p>
+    <a href="https://github.com/0xvanguard/MedScan" class="btn btn-primary" target="_blank" style="display: inline-flex;">
+      ⭐ Star on GitHub
+    </a>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-left">
+        © 2025 MedScan — Open Source Medical Misinformation Detector
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/0xvanguard/MedScan" target="_blank">GitHub</a>
+        <a href="https://github.com/0xvanguard/MedScan/issues" target="_blank">Report Issue</a>
+        <a href="https://github.com/0xvanguard/MedScan#contributing" target="_blank">Contribute</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.feature-card, .step, .category-card').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
