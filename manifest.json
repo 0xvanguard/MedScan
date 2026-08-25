@@ -1,12 +1,13 @@
 {
   "manifest_version": 2,
-  "name": "MedScan — Medical Misinformation Detector",
+  "name": "MedScan",
   "version": "1.0.0",
-  "description": "Detects medical misinformation in real-time and shows evidence-based verdicts from trusted sources.",
+  "description": "Detects medical misinformation in real-time.",
   "permissions": [
     "activeTab",
     "storage",
-    "contextMenus"
+    "contextMenus",
+    "alarms"
   ],
   "browser_specific_settings": {
     "gecko": {
@@ -37,9 +38,5 @@
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
-  },
-  "web_accessible_resources": [
-    "styles/overlay.css",
-    "icons/*"
-  ]
+  }
 }
