@@ -1,10 +1,12 @@
 /**
- * MedScan Background Service Worker
+ * MedScan Background Script (Firefox Compatible)
  * Handles classification, storage, and messaging
  */
 
-// Import knowledge base
-importScripts('data/knowledge-base.js');
+// Firefox uses 'browser' namespace, but 'chrome' works too for compatibility
+const api = typeof browser !== 'undefined' ? browser : chrome;
+
+// Knowledge base is loaded via manifest.json background.scripts array
 
 // ========== STATE ==========
 let scanStats = {
@@ -16,12 +18,12 @@ let scanStats = {
 };
 
 // Load stats from storage
-chrome.storage.local.get('scanStats', (result) => {
+api.storage.local.get('scanStats', (result) => {
   if (result.scanStats) scanStats = result.scanStats;
 });
 
 // ========== MESSAGE HANDLER ==========
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+api.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'SCAN_TEXT') {
     const results = classifyText(request.text);
     sendResponse({ results });
@@ -35,13 +37,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   
   if (request.type === 'RESET_STATS') {
     scanStats = { totalScanned: 0, claimsFound: 0, falseFound: 0, misleadingFound: 0, lastScan: null };
-    chrome.storage.local.set({ scanStats });
+    api.storage.local.set({ scanStats });
     sendResponse({ stats: scanStats });
     return true;
   }
 
   if (request.type === 'GET_HISTORY') {
-    chrome.storage.local.get('history', (result) => {
+    api.storage.local.get('history', (result) => {
       sendResponse({ history: result.history || [] });
     });
     return true;
@@ -102,7 +104,7 @@ function classifyText(text) {
     scanStats.falseFound += results.filter(r => r.verdict === 'false').length;
     scanStats.misleadingFound += results.filter(r => r.verdict === 'misleading').length;
     scanStats.lastScan = new Date().toISOString();
-    chrome.storage.local.set({ scanStats });
+    api.storage.local.set({ scanStats });
     
     // Save to history
     saveToHistory(text, results, potentialClaims);
@@ -117,7 +119,7 @@ function classifyText(text) {
 
 // ========== HISTORY ==========
 function saveToHistory(text, verified, potential) {
-  chrome.storage.local.get('history', (result) => {
+  api.storage.local.get('history', (result) => {
     const history = result.history || [];
     
     // Extract the most relevant snippet
@@ -137,25 +139,25 @@ function saveToHistory(text, verified, potential) {
     // Keep last 100 entries
     if (history.length > 100) history.pop();
     
-    chrome.storage.local.set({ history });
+    api.storage.local.set({ history });
   });
 }
 
 // ========== CONTEXT MENU ==========
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.contextMenus.create({
+api.runtime.onInstalled.addListener(() => {
+  api.contextMenus.create({
     id: 'medscan-scan',
     title: '🔍 MedScan: Analyze this text',
     contexts: ['selection']
   });
 });
 
-chrome.contextMenus.onClicked.addListener((info, tab) => {
+api.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === 'medscan-scan' && info.selectionText) {
     const results = classifyText(info.selectionText);
     
     // Send results to content script for display
-    chrome.tabs.sendMessage(tab.id, {
+    api.tabs.sendMessage(tab.id, {
       type: 'SHOW_VERDICT',
       results: {
         verified: results.verified,
@@ -167,10 +169,10 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 });
 
 // ========== ALARM: Daily reminder ==========
-chrome.alarms.create('medscan-daily', { periodInMinutes: 1440 });
-chrome.alarms.onAlarm.addListener((alarm) => {
+api.alarms.create('medscan-daily', { periodInMinutes: 1440 });
+api.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === 'medscan-daily') {
-    chrome.storage.local.get('scanStats', (result) => {
+    api.storage.local.get('scanStats', (result) => {
       const stats = result.scanStats || {};
       if (stats.claimsFound > 0) {
         console.log(`[MedScan] Daily: ${stats.claimsFound} claims scanned, ${stats.falseFound} false found`);

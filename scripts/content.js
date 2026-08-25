@@ -6,6 +6,9 @@
 (function() {
   'use strict';
   
+  // Firefox uses 'browser' namespace, but 'chrome' works too
+  const api = typeof browser !== 'undefined' ? browser : chrome;
+  
   // ========== CONFIG ==========
   const CONFIG = {
     enabled: true,
@@ -22,7 +25,7 @@
   // ========== INIT ==========
   function init() {
     // Load settings
-    chrome.storage.local.get('settings', (result) => {
+    api.storage.local.get('settings', (result) => {
       if (result.settings) {
         Object.assign(CONFIG, result.settings);
       }
@@ -33,14 +36,14 @@
     });
     
     // Listen for messages from background
-    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    api.runtime.onMessage.addListener((request, sender, sendResponse) => {
       if (request.type === 'SHOW_VERDICT') {
         showVerdictOverlay(request.results);
         sendResponse({ received: true });
       }
       if (request.type === 'TOGGLE_SCAN') {
         CONFIG.enabled = !CONFIG.enabled;
-        chrome.storage.local.set({ settings: CONFIG });
+        api.storage.local.set({ settings: CONFIG });
         sendResponse({ enabled: CONFIG.enabled });
       }
       return true;
@@ -81,10 +84,10 @@
     for (const block of textBlocks) {
       if (block.text.length < CONFIG.minTextLength) continue;
       
-      chrome.runtime.sendMessage(
+      api.runtime.sendMessage(
         { type: 'SCAN_TEXT', text: block.text },
         (response) => {
-          if (chrome.runtime.lastError) return;
+          if (api.runtime.lastError) return;
           if (!response || !response.results) return;
           
           const { verified, potential } = response.results;

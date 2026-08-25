@@ -1,7 +1,10 @@
 /**
- * MedScan Popup Script
+ * MedScan Popup Script (Firefox Compatible)
  * Handles UI interactions and data display
  */
+
+// Firefox uses 'browser' namespace, but 'chrome' works too
+const api = typeof browser !== 'undefined' ? browser : chrome;
 
 document.addEventListener('DOMContentLoaded', () => {
   loadStats();
@@ -11,8 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ========== LOAD STATS ==========
 function loadStats() {
-  chrome.runtime.sendMessage({ type: 'GET_STATS' }, (response) => {
-    if (chrome.runtime.lastError || !response) return;
+  api.runtime.sendMessage({ type: 'GET_STATS' }, (response) => {
+    if (api.runtime.lastError || !response) return;
     
     const { stats } = response;
     document.getElementById('totalScanned').textContent = stats.claimsFound || 0;
@@ -23,8 +26,8 @@ function loadStats() {
 
 // ========== LOAD HISTORY ==========
 function loadHistory() {
-  chrome.runtime.sendMessage({ type: 'GET_HISTORY' }, (response) => {
-    if (chrome.runtime.lastError || !response) return;
+  api.runtime.sendMessage({ type: 'GET_HISTORY' }, (response) => {
+    if (api.runtime.lastError || !response) return;
     
     const { history } = response;
     const list = document.getElementById('historyList');
@@ -66,11 +69,11 @@ function setupEventListeners() {
     scanBtn.innerHTML = '<span class="scan-icon">⏳</span> Scanning...';
     
     // Get current tab
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    api.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs[0]) {
-        chrome.tabs.sendMessage(tabs[0].id, { type: 'TOGGLE_SCAN' }, (response) => {
+        api.tabs.sendMessage(tabs[0].id, { type: 'TOGGLE_SCAN' }, (response) => {
           // Trigger scan
-          chrome.tabs.sendMessage(tabs[0].id, { type: 'SCAN_PAGE' }, () => {
+          api.tabs.sendMessage(tabs[0].id, { type: 'SCAN_PAGE' }, () => {
             setTimeout(() => {
               scanBtn.classList.remove('scanning');
               scanBtn.innerHTML = '<span class="scan-icon">⚡</span> Scan Current Page';
@@ -85,8 +88,8 @@ function setupEventListeners() {
   
   // Clear history
   document.getElementById('clearHistory').addEventListener('click', () => {
-    chrome.runtime.sendMessage({ type: 'RESET_STATS' }, () => {
-      chrome.storage.local.set({ history: [] }, () => {
+    api.runtime.sendMessage({ type: 'RESET_STATS' }, () => {
+      api.storage.local.set({ history: [] }, () => {
         loadStats();
         loadHistory();
       });
@@ -95,24 +98,24 @@ function setupEventListeners() {
   
   // Auto-scan toggle
   document.getElementById('autoScan').addEventListener('change', (e) => {
-    chrome.storage.local.get('settings', (result) => {
+    api.storage.local.get('settings', (result) => {
       const settings = result.settings || {};
       settings.autoScan = e.target.checked;
-      chrome.storage.local.set({ settings });
+      api.storage.local.set({ settings });
     });
   });
   
   // Show badges toggle
   document.getElementById('showBadges').addEventListener('change', (e) => {
-    chrome.storage.local.get('settings', (result) => {
+    api.storage.local.get('settings', (result) => {
       const settings = result.settings || {};
       settings.showBadges = e.target.checked;
-      chrome.storage.local.set({ settings });
+      api.storage.local.set({ settings });
     });
   });
   
   // Load saved settings
-  chrome.storage.local.get('settings', (result) => {
+  api.storage.local.get('settings', (result) => {
     if (result.settings) {
       document.getElementById('autoScan').checked = result.settings.autoScan !== false;
       document.getElementById('showBadges').checked = result.settings.showBadges !== false;

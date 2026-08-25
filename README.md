@@ -1,27 +1,23 @@
 # 🔍 MedScan — Medical Misinformation Detector
 
-**Chrome Extension that detects medical misinformation in real-time and shows evidence-based verdicts from trusted sources.**
+**Firefox Extension that detects medical misinformation in real-time and shows evidence-based verdicts from trusted sources.**
 
 > 🌍 Protecting health, one scan at a time.
-
-![MedScan Logo](icons/icon128.png)
 
 ## 🚀 Quick Install (Development)
 
 ### Step 1: Clone or Download
 
 ```bash
-git clone https://github.com/medscan/community.git
-# or just download the ZIP
+git clone https://github.com/0xvanguard/MedScan.git
 ```
 
-### Step 2: Load in Chrome
+### Step 2: Load in Firefox
 
-1. Open Chrome and go to `chrome://extensions/`
-2. Enable **Developer Mode** (toggle in top right)
-3. Click **"Load unpacked"**
-4. Select the `medscan-extension` folder
-5. Done! 🎉
+1. Open Firefox and go to `about:debugging#/runtime/this-firefox`
+2. Click **"Load Temporary Add-on..."**
+3. Select the `manifest.json` file from the MedScan folder
+4. Done! 🎉
 
 ### Step 3: Test It
 
@@ -87,16 +83,17 @@ Verified claims from trusted sources:
 ## 📁 Project Structure
 
 ```
-medscan-extension/
-├── manifest.json          # Chrome Extension manifest v3
+medscan/
+├── manifest.json          # Firefox Extension manifest v2
 ├── popup.html             # Extension popup UI
 ├── popup.js               # Popup logic
+├── index.html             # Landing page
 ├── icons/
 │   ├── icon16.png         # 16x16 icon
 │   ├── icon48.png         # 48x48 icon
 │   └── icon128.png        # 128x128 icon
 ├── scripts/
-│   ├── background.js      # Service worker
+│   ├── background.js      # Background script
 │   └── content.js         # Content script
 ├── styles/
 │   ├── popup.css          # Popup styles
@@ -131,7 +128,7 @@ Edit `data/knowledge-base.js`:
 
 ### Testing
 
-1. Load extension in Chrome (Developer Mode)
+1. Load extension in Firefox (about:debugging)
 2. Visit health articles with known misinformation
 3. Check console for scan logs
 4. Verify overlay appears correctly
@@ -173,7 +170,7 @@ Every scan prevents misinformation from spreading. Help us protect:
 - **No data leaves your browser**
 - All scans happen locally
 - No tracking, no analytics, no telemetry
-- History stored only in Chrome storage
+- History stored only in Firefox storage
 
 ## 📜 License
 
