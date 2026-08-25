@@ -32,9 +32,10 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "CAN-005",
     patterns: [
-      /vph\s+se\s+cura\s+con\s+hierbas/i,
-      /virus\s+del\s+papiloma\s+natural/i,
-      /vacuna\s+vph\s+causa\s+infertilidad/i
+      /vph[^.]*hierbas/i,
+      /papiloma[^.]*hierbas/i,
+      /papiloma[^.]*cur[ae]/i,
+      /vph[^.]*cur[ae]/i
     ],
     verdict: "false",
     confidence: 0.96,
@@ -229,9 +230,10 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "HIV-001",
     patterns: [
-      /sida\s+se\s+cura\s+con\s+hierbas/i,
-      /vih\s+se\s+cura\s+natural/i,
-      /antirretrovirales\s+son\s+veneno/i
+      /sida[^.]*hierbas/i,
+      /vih[^.]*cur[ae]/i,
+      /sida[^.]*cur[ae]/i,
+      /antirretrovirales[^.]*veneno/i
     ],
     verdict: "false",
     confidence: 0.99,
@@ -302,9 +304,9 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "VIT-001",
     patterns: [
-      /vitamina[^.]*c[^.]*cura[^.]*gripe/i,
-      /vitamina[^.]*c[^.]*cura[^.]*resfriado/i,
-      /vitamina[^.]*c[^.]*cura[^.]*todo/i
+      /vitamina\s+c[^.]*cura/i,
+      /vitamina\s+c[^.]*prevenir/i,
+      /vitamina\s+c[^.]*megadosis/i
     ],
     verdict: "misleading",
     confidence: 0.85,
@@ -433,9 +435,9 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "SKI-001",
     patterns: [
-      /crema\s+de\s+mercurio\s+blanquea/i,
-      /mercurio\s+para\s+la\s+piel/i,
-      /calomel\s+blanquea\s+pelo/i
+      /mercurio[^.]*piel/i,
+      /mercurio[^.]*blanquea/i,
+      /calomel[^.]*blanquea/i
     ],
     verdict: "false",
     confidence: 0.99,
@@ -560,9 +562,10 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "MH-003",
     patterns: [
-      /esquizofrenia\s+se\s+cura\s+con\s+fe/i,
-      /psicosis\s+es\s+posesión/i,
-      /esquizofrenia\s+se\s+cura\s+con\s+oración/i
+      /esquizofrenia[^.]*fe/i,
+      /esquizofrenia[^.]*oración/i,
+      /esquizofrenia[^.]*cur[ae]/i,
+      /psicosis[^.]*posesión/i
     ],
     verdict: "false",
     confidence: 0.97,
@@ -980,9 +983,9 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "FAST-001",
     patterns: [
-      /ayuno\s+cura\s+todo/i,
-      /ayuno\s+intermitente\s+rejuvenece/i,
-      /ayuno\s+de\s+30\s+días\s+cura/i
+      /ayuno[^.]*cura/i,
+      /ayuno[^.]*diabetes/i,
+      /ayuno[^.]*rejuvenec/i
     ],
     verdict: "false",
     confidence: 0.90,
@@ -1203,9 +1206,9 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "GUT-001",
     patterns: [
-      /flora\s+intestinal\s+cura\s+todo/i,
-      /probióticos\s+cura\s+depresión/i,
-      /intestino\s+segundo\s+cerebro\s+cura/i
+      /probióticos[^.]*cura/i,
+      /flora[^.]*intestinal[^.]*cura/i,
+      /intestino[^.]*cur[ae]/i
     ],
     verdict: "misleading",
     confidence: 0.80,
@@ -1501,9 +1504,8 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "VAX-001",
     patterns: [
-      /vacunas?\s+causan?\s+autismo/i,
-      /vacunas\s+y\s+autismo/i,
-      /autismo\s+por\s+vacunas/i
+      /vacuna[^.]*autismo/i,
+      /autismo[^.]*vacuna/i
     ],
     verdict: "false",
     confidence: 0.99,
@@ -1558,7 +1560,7 @@ const MEDICAL_KNOWLEDGE_BASE = [
     patterns: [
       /bicarbonato[^.]*cáncer/i,
       /alcaliniza[^.]*cáncer/i,
-      /curar[^.]*cáncer[^.]*bicarbonato/i
+      /bicarbonato[^.]*cur[ae]/i
     ],
     verdict: "false",
     confidence: 0.98,
@@ -1611,9 +1613,9 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "COVID-001",
     patterns: [
-      /ivermectina\s+cure\s+covid/i,
-      /ivermectina\s+para\s+covid/i,
-      /ivermectina\s+previene\s+covid/i
+      /ivermectina[^.]*covid/i,
+      /ivermectina[^.]*coronavirus/i,
+      /covid[^.]*ivermectina/i
     ],
     verdict: "misleading",
     confidence: 0.88,
@@ -1700,9 +1702,9 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "REM-003",
     patterns: [
-      /(?:la\s+)?plata\s+coloidal\s+(?:es\s+un\s+antibiótico\s+natural\s+que\s+)?cura/i,
-      /plata\s+coloidal\s+inmune/i,
-      /plata\s+coloidal\s+antibiótico/i
+      /plata\s+coloidal[^.]*cura/i,
+      /plata\s+coloidal[^.]*infección/i,
+      /plata\s+coloidal[^.]*antibiótico/i
     ],
     verdict: "false",
     confidence: 0.95,
@@ -1719,10 +1721,10 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "MH-001",
     patterns: [
-      /depresión\s+es\s+falta\s+de\s+fe/i,
-      /depresión\s+no\s+existe/i,
-      /tristeza\s+no\s+es\s+depresión/i,
-      /ansiedad\s+es\s+debilidad/i
+      /depresión[^.]*falta[^.]*fe/i,
+      /depresión[^.]*no\s+existe/i,
+      /depresión[^.]*debilidad/i,
+      /ansiedad[^.]*debilidad/i
     ],
     verdict: "false",
     confidence: 0.95,
@@ -1774,9 +1776,9 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "ALI-002",
     patterns: [
-      /gluten\s+causa\s+autismo/i,
-      /dieta\s+sin\s+gluten\s+cura\s+autismo/i,
-      /gluten\s+libre\s+y\s+autismo/i
+      /gluten[^.]*autismo/i,
+      /autismo[^.]*gluten/i,
+      /dieta[^.]*autismo/i
     ],
     verdict: "false",
     confidence: 0.92,
@@ -1793,9 +1795,9 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "ANT-001",
     patterns: [
-      /(?:tomar\s+)?antibióticos\s+para\s+(?:la\s+)?gripe(?:\s+viral)?/i,
-      /antibióticos\s+viral/i,
-      /tomar\s+antibióticos\s+prevención/i
+      /antibióticos[^.]*gripe/i,
+      /antibióticos[^.]*viral/i,
+      /gripe[^.]*antibióticos/i
     ],
     verdict: "false",
     confidence: 0.98,
@@ -1812,10 +1814,9 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "EME-001",
     patterns: [
-      /no\s+llames?\s+a\s+ambulancia/i,
-      /no\s+vayas?\s+al\s+hospital/i,
-      /tratar\s+en\s+casa\s+infarto/i,
-      /infarto\s+se\s+cura\s+en\s+casa/i
+      /no[^.]*llames?[^.]*ambulancia/i,
+      /infarto[^.]*casa/i,
+      /infarto[^.]*no[^.]*hospital/i
     ],
     verdict: "false",
     confidence: 0.99,
