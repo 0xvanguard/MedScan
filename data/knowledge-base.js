@@ -121,9 +121,9 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "HEA-001",
     patterns: [
-      /aceite\s+de\s+coco\s+es\+bueno\s+para\s+el\corazón/i,
-      /aceite\s+coco\s+baja\s+colesterol/i,
-      /mantequilla\s+es\s+mejor\s+que\s+margarina/i
+      /coco[^.]*bueno[^.]*corazón/i,
+      /coco[^.]*colesterol/i,
+      /coco[^.]*baja[^.]*colesterol/i
     ],
     verdict: "misleading",
     confidence: 0.80,
@@ -302,9 +302,9 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "VIT-001",
     patterns: [
-      /vitamina\s+c\s+cura\s+gripe/i,
-      /vitamina\s+c\s+preven\s+resfriado/i,
-      /megadosis\s+vitamina\s+c\s+cura/i
+      /vitamina[^.]*c[^.]*cura[^.]*gripe/i,
+      /vitamina[^.]*c[^.]*cura[^.]*resfriado/i,
+      /vitamina[^.]*c[^.]*cura[^.]*todo/i
     ],
     verdict: "misleading",
     confidence: 0.85,
@@ -1501,10 +1501,9 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "VAX-001",
     patterns: [
-      /vaci[ua]n[ea]s?\s+causan?\s+autismo/i,
-      /autismo\s+por\s+vacunas/i,
+      /vacunas?\s+causan?\s+autismo/i,
       /vacunas\s+y\s+autismo/i,
-      /vacuna\s+produc[ei]\s+autismo/i
+      /autismo\s+por\s+vacunas/i
     ],
     verdict: "false",
     confidence: 0.99,
@@ -1557,10 +1556,9 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "CAN-001",
     patterns: [
-      /bicarbonato\s+cura\s+cancer/i,
-      /bicarbonato\s+de\s+sodio\s+y\s+cancer/i,
-      /alcaliniza[rn]?\s+el\s+cuerpo\s+y\s+cancer/i,
-      /ph\s+alcalino\s+cura/i
+      /bicarbonato[^.]*cáncer/i,
+      /alcaliniza[^.]*cáncer/i,
+      /curar[^.]*cáncer[^.]*bicarbonato/i
     ],
     verdict: "false",
     confidence: 0.98,
@@ -1702,7 +1700,7 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "REM-003",
     patterns: [
-      /coloidal\s+plata\s+cura/i,
+      /(?:la\s+)?plata\s+coloidal\s+(?:es\s+un\s+antibiótico\s+natural\s+que\s+)?cura/i,
       /plata\s+coloidal\s+inmune/i,
       /plata\s+coloidal\s+antibiótico/i
     ],
@@ -1795,7 +1793,7 @@ const MEDICAL_KNOWLEDGE_BASE = [
   {
     id: "ANT-001",
     patterns: [
-      /antibióticos\s+para\s+gripe/i,
+      /(?:tomar\s+)?antibióticos\s+para\s+(?:la\s+)?gripe(?:\s+viral)?/i,
       /antibióticos\s+viral/i,
       /tomar\s+antibióticos\s+prevención/i
     ],
