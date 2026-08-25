@@ -7,7 +7,701 @@
  */
 
 const MEDICAL_KNOWLEDGE_BASE = [
-  // ========== VACCINES ==========
+
+  // ==================== VACCINES ====================
+  // VAX-001 to VAX-003 already exist below
+
+  // ==================== CANCER (MORE) ====================
+  {
+    id: "CAN-004",
+    patterns: [
+      /apio\s+cura\s+cancer/i,
+      /jugo\s+de\s+apio\s+y\s+cancer/i,
+      /celery\s+j cure/i
+    ],
+    verdict: "false",
+    confidence: 0.95,
+    explanation: "No existe evidencia científica de que el apio o su jugo cure el cáncer. Ningún alimento por sí solo puede curar el cáncer.",
+    sources: [
+      { name: "American Cancer Society", url: "https://www.cancer.org/treatment/treatments-and-side-effects/complementary-and-alternative-medicine.html" },
+      { name: "NCI - Anticancer Drugs", url: "https://www.cancer.gov/about-cancer/treatment/cam" }
+    ],
+    category: "cancer",
+    severity: "high"
+  },
+  {
+    id: "CAN-005",
+    patterns: [
+      /vph\s+se\s+cura\s+con\s+hierbas/i,
+      /virus\s+del\s+papiloma\s+natural/i,
+      /vacuna\s+vph\s+causa\s+infertilidad/i
+    ],
+    verdict: "false",
+    confidence: 0.96,
+    explanation: "El VPH no se cura con hierbas. La vacuna contra el VPH es segura y efectiva, y NO causa infertilidad. Previene cánceres causados por el VPH.",
+    sources: [
+      { name: "CDC - HPV Vaccine", url: "https://www.cdc.gov/hpv/vaccine/index.html" },
+      { name: "WHO - HPV", url: "https://www.who.int/news-room/fact-sheets/detail/human-papillomavirus-(hpv)" }
+    ],
+    category: "cancer",
+    severity: "high"
+  },
+  {
+    id: "CAN-006",
+    patterns: [
+      /mamosa\s+cura\s+cancer/i,
+      /graviola\s+cura\s+cancer/i,
+      /soursop\s+cures?\s+cancer/i
+    ],
+    verdict: "false",
+    confidence: 0.94,
+    explanation: "La guanábana/mamosa/graviola NO cura el cáncer. Estudios in vitro no son equivalentes a tratamientos probados en humanos. Puede ser tóxica en exceso.",
+    sources: [
+      { name: "NCI - Graviola", url: "https://www.cancer.gov/about-cancer/treatment/cam/hp/graviola-pdq" },
+      { name: "FDA - Toxic Plants", url: "https://www.fda.gov/food/buy-store-serve-safe-food/foodborne-illness-and-germs" }
+    ],
+    category: "cancer",
+    severity: "high"
+  },
+
+  // ==================== DIABETES ====================
+  {
+    id: "DIA-001",
+    patterns: [
+      /diabetes\s+se\s+cura\s+con\s+canela/i,
+      /canela\s+cura\s+diabetes/i,
+      /canela\s+reemplaza\s+insulina/i
+    ],
+    verdict: "false",
+    confidence: 0.95,
+    explanation: "La canela NO cura la diabetes. Puede ayudar marginalmente con la sensibilidad a la insulina, pero NUNCA debe reemplazar medicamentos prescritos.",
+    sources: [
+      { name: "ADA - Cinnamon", url: "https://diabetes.org/healthy-living/medication-treatments/cinnamon-and-diabetes" },
+      { name: "PubMed Review", url: "https://pubmed.ncbi.nlm.nih.gov/?term=cinnamon+diabetes+meta-analysis" }
+    ],
+    category: "diabetes",
+    severity: "high"
+  },
+  {
+    id: "DIA-002",
+    patterns: [
+      /diabetes\s+es\+por\s+comer\s+azúcar/i,
+      /azúcar\+causa\s+diabetes\s+tipo/i,
+      /si\s+no\s+comes\s+azúcar\s+no\s+tienes\s+diabetes/i
+    ],
+    verdict: "misleading",
+    confidence: 0.80,
+    explanation: "La diabetes tipo 2 tiene factores genéticos, peso, edad y sedentarismo. Comer azúcar NO causa diabetes directamente, aunque una dieta alta en azúcar contribuye al sobrepeso.",
+    sources: [
+      { name: "CDC - Diabetes", url: "https://www.cdc.gov/diabetes/risk-factors/index.html" },
+      { name: "WHO - Diabetes", url: "https://www.who.int/news-room/fact-sheets/detail/diabetes" }
+    ],
+    category: "diabetes",
+    severity: "medium"
+  },
+  {
+    id: "DIA-003",
+    patterns: [
+      /diabetes\s+tipo\s+2\s+se\s+cura\s+con\s+ayuno/i,
+      /ayuno\s+intermitente\s+cura\s+diabetes/i,
+      /diabetes\s+reversible\s+con\s+dieta/i
+    ],
+    verdict: "misleading",
+    confidence: 0.75,
+    explanation: "Algunos estudios muestran mejora con pérdida de peso significativa, pero 'cura' es engañoso. La diabetes tipo 2 es una condición crónica que se gestiona, no se cura.",
+    sources: [
+      { name: "ADA - Remission", url: "https://diabetes.org/diabetes/remission" },
+      { name: "NEJM - DiRECT Trial", url: "https://www.nejm.org/doi/full/10.1056/NEJMoa1716153" }
+    ],
+    category: "diabetes",
+    severity: "medium"
+  },
+
+  // ==================== HEART DISEASE ====================
+  {
+    id: "HEA-001",
+    patterns: [
+      /aceite\s+de\s+coco\s+es\+bueno\s+para\s+el\corazón/i,
+      /aceite\s+coco\s+baja\s+colesterol/i,
+      /mantequilla\s+es\s+mejor\s+que\s+margarina/i
+    ],
+    verdict: "misleading",
+    confidence: 0.80,
+    explanation: "El aceite de coco es alto en grasas saturadas. La AHA no lo recomienda para mejorar la salud cardíaca. Puede elevar el colesterol LDL.",
+    sources: [
+      { name: "AHA - Coconut Oil", url: "https://www.heart.org/en/news/2020/03/30/more-evidence-that-higher-coconut-oil-intake-may-increase-heart-disease-risk" },
+      { name: "Circulation", url: "https://www.ahajournals.org/doi/10.1161/CIR.0000000000000743" }
+    ],
+    category: "heart",
+    severity: "medium"
+  },
+  {
+    id: "HEA-002",
+    patterns: [
+      /infarto\s+se\s+cura\s+con\s+ajo/i,
+      /ajo\s+disuelve\s+placas/i,
+      /ajo\s+liquida\s+la\s+sangre/i
+    ],
+    verdict: "false",
+    confidence: 0.92,
+    explanation: "El ajo tiene propiedades modestas, pero NO disuelve placas arteriales ni previene infartos. Las estatinas y cambios en el estilo de vida son los tratamientos probados.",
+    sources: [
+      { name: "AHA - Garlic", url: "https://www.heart.org/en/healthy-living/healthy-eating/eat-smart/nutrition-basics/garlic" },
+      { name: "Cochrane Review", url: "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD007653.pub2/full" }
+    ],
+    category: "heart",
+    severity: "high"
+  },
+
+  // ==================== PREGNANCY ====================
+  {
+    id: "PRE-001",
+    patterns: [
+      /embarazo\s+no\s+tomar\s+ácido\s+fólico/i,
+      /ácido\s+fólico\s+es\s+opcional/i,
+      /vitaminas\s+no\s+necesarias\s+embarazo/i
+    ],
+    verdict: "false",
+    confidence: 0.97,
+    explanation: "El ácido fólico es ESENCIAL durante el embarazo. Previene defectos del tubo neural como la espina bífida. La OMS recomienda 400-800 mcg diarios.",
+    sources: [
+      { name: "WHO - Folic Acid", url: "https://www.who.int/publications/i/item/9241546840" },
+      { name: "ACOG", url: "https://www.acog.org/womens-health/faqs/folic-acid" }
+    ],
+    category: "pregnancy",
+    severity: "critical"
+  },
+  {
+    id: "PRE-002",
+    patterns: [
+      /embarazo\s+no\s+vacunar/i,
+      /vacuna\s+en\s+embarazo\s+peligro/i,
+      /vacuna\s+gripe\s+embarazo\s+mata/i
+    ],
+    verdict: "false",
+    confidence: 0.96,
+    explanation: "Las vacunas de gripe y Tdap son SEGURAS y RECOMENDADAS durante el embarazo. Protegen a la madre y al bebé. No contienen virus vivos.",
+    sources: [
+      { name: "CDC - Vaccines & Pregnancy", url: "https://www.cdc.gov/vaccines/pregnancy/index.html" },
+      { name: "WHO", url: "https://www.who.int/news-room/questions-and-answers/item/vaccines-and-immunization-what-is-vaccination" }
+    ],
+    category: "pregnancy",
+    severity: "critical"
+  },
+
+  // ==================== CHILDREN'S HEALTH ====================
+  {
+    id: "CHI-001",
+    patterns: [
+      /fiebre\s+en\s+niños\s+peligrosa/i,
+      /fiebre\s+mata\s+neuronas/i,
+      /paracetamol\s+en\s+niños\s+veneno/i
+    ],
+    verdict: "false",
+    confidence: 0.90,
+    explanation: "La fiebre es una respuesta normal del sistema inmunológico. Por sí sola NO daña el cerebro. El paracetamol/ibuprofeno en dosis correctas es seguro para niños.",
+    sources: [
+      { name: "AAP - Fever", url: "https://www.healthychildren.org/English/health-issues/conditions/fever/Pages/Fever-Without-Fear.aspx" },
+      { name: "NICE Guidelines", url: "https://www.nice.org.uk/guidance/cg160" }
+    ],
+    category: "children",
+    severity: "high"
+  },
+  {
+    id: "CHI-002",
+    patterns: [
+      /autismo\s+se\s+cura\s+con\s+dieta/i,
+      /dieta\s+keto\s+cura\s+autismo/i,
+      /autismo\s+se\s+cura\s+con\s+terapia\s+natural/i
+    ],
+    verdict: "false",
+    confidence: 0.95,
+    explanation: "El autismo NO tiene cura. Las terapias conductuales (ABA, etc.) pueden ayudar, pero las dietas 'curativas' no tienen evidencia científica.",
+    sources: [
+      { name: "Autism Speaks", url: "https://www.autismspeaks.org/what-autism" },
+      { name: "NIH", url: "https://www.nimh.nih.gov/health/topics/autism-spectrum-disorders-asd" }
+    ],
+    category: "children",
+    severity: "high"
+  },
+
+  // ==================== HIV/AIDS ====================
+  {
+    id: "HIV-001",
+    patterns: [
+      /sida\s+se\s+cura\s+con\s+hierbas/i,
+      /vih\s+se\s+cura\s+natural/i,
+      /antirretrovirales\s+son\s+veneno/i
+    ],
+    verdict: "false",
+    confidence: 0.99,
+    explanation: "El VIH NO tiene cura conocida. Los antirretrovirales son tratamientos que mantienen la carga viral indetectable. Suspenderlos puede ser fatal.",
+    sources: [
+      { name: "WHO - HIV/AIDS", url: "https://www.who.int/news-room/fact-sheets/detail/hiv-aids" },
+      { name: "CDC - Treatment", url: "https://www.cdc.gov/hiv/basics/livingwithhiv/treatment.html" }
+    ],
+    category: "infectious",
+    severity: "critical"
+  },
+  {
+    id: "HIV-002",
+    patterns: [
+      /vih\s+no\+existe/i,
+      /sida\s+es\s+inventado/i,
+      /vih\s+se\s+transmite\s+por\s+besos/i
+    ],
+    verdict: "false",
+    confidence: 0.99,
+    explanation: "El VIH es un virus real, secuenciado y estudiado extensamente. NO se transmite por besos, abrazos, vasos ni mosquito. Se transmite por fluidos corporales.",
+    sources: [
+      { name: "CDC - Transmission", url: "https://www.cdc.gov/hiv/basics/transmission.html" },
+      { name: "NIH", url: "https://www.niaid.nih.gov/diseases-conditions/hiv-aids" }
+    ],
+    category: "infectious",
+    severity: "critical"
+  },
+
+  // ==================== WEIGHT LOSS ====================
+  {
+    id: "WLO-001",
+    patterns: [
+      /píldora\s+de\s+dieta\s+quema\s+grasa/i,
+      /suplemento\s+mágico\s+bajar\s+peso/i,
+      /te\s+quema\s+grasa\s+rápido/i,
+      /pastilla\s+para\+adelgazar\s+sin\s+dieta/i
+    ],
+    verdict: "false",
+    confidence: 0.95,
+    explanation: "No existe pastilla mágica para bajar de peso. Los suplementos para dietas pueden ser peligrosos (contaminados, no regulados). La pérdida de peso sostenible requiere dieta y ejercicio.",
+    sources: [
+      { name: "FDA - Weight Loss Supplements", url: "https://www.fda.gov/consumers/consumer-updates/tainted-weight-loss-products" },
+      { name: "NIH", url: "https://www.niddk.nih.gov/health-information/weight-management/healthy-weight" }
+    ],
+    category: "weight-loss",
+    severity: "high"
+  },
+  {
+    id: "WLO-002",
+    patterns: [
+      /comida\s+light\s+se\s+puede\s+comer\s+sin\s+límite/i,
+      /light\s+no\s+engorda/i,
+      /diet\+cola\s+no\s+engorda/i
+    ],
+    verdict: "misleading",
+    confidence: 0.80,
+    explanation: "Los productos 'light' pueden tener menos calorías, pero no significa que puedas comer sin límite. El efecto psicológico puede llevar a comer más de otras fuentes.",
+    sources: [
+      { name: "FDA - Labeling", url: "https://www.fda.gov/food/food-labeling-nutrition/food-labeling-guide" },
+      { name: "NIH", url: "https://www.niddk.nih.gov/health-information/weight-management/healthy-weight" }
+    ],
+    category: "weight-loss",
+    severity: "medium"
+  },
+
+  // ==================== VITAMINS & SUPPLEMENTS ====================
+  {
+    id: "VIT-001",
+    patterns: [
+      /vitamina\s+c\s+cura\s+gripe/i,
+      /vitamina\s+c\s+preven\s+resfriado/i,
+      /megadosis\s+vitamina\s+c\s+cura/i
+    ],
+    verdict: "misleading",
+    confidence: 0.85,
+    explanation: "La vitamina C NO cura la gripe. Puede reducir ligeramente la duración del resfriado (8% en adultos), pero NO lo previene. Megadosis pueden causar problemas renales.",
+    sources: [
+      { name: "Cochrane Review", url: "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD000980.pub4/full" },
+      { name: "NIH - Vitamin C", url: "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/" }
+    ],
+    category: "supplements",
+    severity: "medium"
+  },
+  {
+    id: "VIT-002",
+    patterns: [
+      /vitamina\s+d\s+cura\s+todo/i,
+      /vitamina\s+d\s+es\s+la\s+cura/i,
+      /déficit\s+vitamina\s+d\s+causa\s+todo/i
+    ],
+    verdict: "misleading",
+    confidence: 0.80,
+    explanation: "La vitamina D es importante pero NO es una cura universal. El exceso puede ser tóxico (hipervitaminosis D). Los niveles deben ser monitoreados por un médico.",
+    sources: [
+      { name: "NIH - Vitamin D", url: "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/" },
+      { name: "Endocrine Society", url: "https://www.endocrine.org/diseases-and-conditions/vitamin-d" }
+    ],
+    category: "supplements",
+    severity: "medium"
+  },
+
+  // ==================== DENTAL ====================
+  {
+    id: "DEN-001",
+    patterns: [
+      /dientes\s+se\s+blanquean\s+con\s+limón/i,
+      /bicarbonato\s+blanquea\s+dientes/i,
+      /hidrógeno\s+oxidado\s+bucal/i
+    ],
+    verdict: "misleading",
+    confidence: 0.85,
+    explanation: "El limón y bicarbonato en exceso dañan el esmalte dental. El peróxido de hidrógeno bucal puede causar irritación. Consulta a un dentista para blanqueamiento seguro.",
+    sources: [
+      { name: "ADA", url: "https://www.ada.org/resources/research/science-and-research-institute/oral-health-topics/teeth-whitening" },
+      { name: "Cleveland Clinic", url: "https://health.clevelandclinic.org/why-you-should-not-use-baking-soda-and-lemon-juice-to-whiten-your-teeth" }
+    ],
+    category: "dental",
+    severity: "medium"
+  },
+
+  // ==================== SLEEP ====================
+  {
+    id: "SLE-001",
+    patterns: [
+      /melatonina\s+es\+segura\s+siempre/i,
+      /melatonina\s+no\s+tiene\s+efectos/i,
+      /dormir\s+4\s+horas\s+es\s+suficiente/i
+    ],
+    verdict: "misleading",
+    confidence: 0.82,
+    explanation: "La melatonina puede ayudar a regular el sueño pero el exceso puede causar problemas. Dormir menos de 6 horas se asocia con problemas de salud serios.",
+    sources: [
+      { name: "NIH - Melatonin", url: "https://ods.od.nih.gov/factsheets/Melatonin-HealthProfessional/" },
+      { name: "AASM", url: "https://aasm.org/resources/factsheets/sleepduration/" }
+    ],
+    category: "sleep",
+    severity: "medium"
+  },
+
+  // ==================== STI/STD ====================
+  {
+    id: "STI-001",
+    patterns: [
+      /herpes\s+se\s+cura\s+con\s+hierbas/i,
+      /virus\s+herpes\s+natural/i,
+      /herpes\s+desaparece\s+con\s+aceite/i
+    ],
+    verdict: "false",
+    confidence: 0.97,
+    explanation: "El herpes (HSV-1 y HSV-2) NO tiene cura conocida. Los antivirales (aciclovir) controlan los brotes pero no eliminan el virus. Los 'remedios naturales' no funcionan.",
+    sources: [
+      { name: "CDC - Herpes", url: "https://www.cdc.gov/std/herpes/index.htm" },
+      { name: "WHO", url: "https://www.who.int/news-room/fact-sheets/detail/herpes-simplex-virus" }
+    ],
+    category: "sti",
+    severity: "high"
+  },
+
+  // ==================== AGING ====================
+  {
+    id: "AGE-001",
+    patterns: [
+      /aceite\s+de\s+ricino\s+crece\s+pelo/i,
+      /aceite\s+ricino\s+calvicie/i,
+      /gel\s+de\s+aloe\s+crece\s+cabello/i
+    ],
+    verdict: "false",
+    confidence: 0.90,
+    explanation: "No existe evidencia de que el aceite de ricino o aloe vera hagan crecer el cabello. La calvicie (alopecia androgénica) tiene causas genéticas/hormonales que estos productos no abordan.",
+    sources: [
+      { name: "AAD - Hair Loss", url: "https://www.aad.org/public/diseases/hair-loss/types/alopecia-areata/treatment" },
+      { name: "PubMed", url: "https://pubmed.ncbi.nlm.nih.gov/?term=castor+oil+hair+growth" }
+    ],
+    category: "aging",
+    severity: "medium"
+  },
+
+  // ==================== EYE CARE ====================
+  {
+    id: "EYE-001",
+    patterns: [
+      /zanahoria\s+mejora\s+visión/i,
+      /zanahoria\s+cura\s+miopía/i,
+      /ojos\s+se\s+ejercitan\s+con\s+ejercicios/i
+    ],
+    verdict: "misleading",
+    confidence: 0.80,
+    explanation: "Las zanahorias aportan vitamina A (buena para la salud ocular) pero NO mejoran la miopía ni 'curan' problemas de visión. Los ejercicios oculares no corrigen errores refractivos.",
+    sources: [
+      { name: "AAO", url: "https://www.aao.org/eye-health/tips-prevention/nutrition-vision" },
+      { name: "Cochrane Review", url: "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD013244.pub2/full" }
+    ],
+    category: "eye-care",
+    severity: "medium"
+  },
+
+  // ==================== SKIN CARE ====================
+  {
+    id: "SKI-001",
+    patterns: [
+      /crema\s+de\s+mercurio\s+blanquea/i,
+      /mercurio\s+para\s+la\s+piel/i,
+      /calomel\s+blanquea\s+pelo/i
+    ],
+    verdict: "false",
+    confidence: 0.99,
+    explanation: "El mercurio es ALTAMENTE TÓXICO. Causa daño neurológico, renal y puede ser mortal. Está PROHIBIDO en cosméticos en la mayoría de países.",
+    sources: [
+      { name: "FDA - Mercury in Cosmetics", url: "https://www.fda.gov/cosmetics/productsingredients/ingredients/ucm127412.htm" },
+      { name: "WHO - Mercury", url: "https://www.who.int/news-room/fact-sheets/detail/mercury-and-health" }
+    ],
+    category: "skin",
+    severity: "critical"
+  },
+
+  // ==================== MORE VACCINES ====================
+  {
+    id: "VAX-004",
+    patterns: [
+      /vacuna\s+gripe\s+causa\s+gripe/i,
+      /vacuna\s+gripe\s+te\s+enferma/i,
+      /gripe\s+por\s+vacuna/i
+    ],
+    verdict: "false",
+    confidence: 0.97,
+    explanation: "La vacuna de gripe NO contiene virus vivos y NO puede causar gripe. Los efectos leves (dolor, fiebre baja) son normales y duran 1-2 días.",
+    sources: [
+      { name: "CDC - Flu Vaccine Safety", url: "https://www.cdc.gov/flu/prevent/vaccinationsafety.htm" },
+      { name: "WHO", url: "https://www.who.int/news-room/questions-and-answers/item/influenza-vaccines" }
+    ],
+    category: "vaccines",
+    severity: "high"
+  },
+  {
+    id: "VAX-005",
+    patterns: [
+      /vacuna\s+covid\s+causa\s+infertilidad/i,
+      /covid\s+vaccine\s+causes\s+infertility/i,
+      /vacuna\s+mrna\s+modifica\s+adn/i
+    ],
+    verdict: "false",
+    confidence: 0.98,
+    explanation: "Las vacunas de COVID-19 NO causan infertilidad y NO modifican el ADN. Los ensayos clínicos y millones de dosis confirmaron su seguridad reproductiva.",
+    sources: [
+      { name: "CDC - Fertility", url: "https://www.cdc.gov/coronavirus/2019-ncov/vaccines/faq.html" },
+      { name: "NEJM", url: "https://www.nejm.org/doi/full/10.1056/NEJMoa2104983" }
+    ],
+    category: "vaccines",
+    severity: "critical"
+  },
+
+  // ==================== MORE COVID ====================
+  {
+    id: "COVID-004",
+    patterns: [
+      /covid\s+se\s+cura\s+con\s+vitamina\s+d/i,
+      /vitamina\s+d\s+previene\s+covid/i,
+      /zinc\s+cures?\s+covid/i
+    ],
+    verdict: "misleading",
+    confidence: 0.80,
+    explanation: "La vitamina D y zinc pueden apoyar el sistema inmunológico, pero NO previenen ni curan COVID-19. Las vacunas son la protección principal.",
+    sources: [
+      { name: "WHO", url: "https://www.who.int/publications/i/item/WHO-2019-nCoV-Sci_Brief-Nutritional_supplements-2022.1" },
+      { name: "Cochrane Review", url: "https://www.cochranelibrary.com/cdsr/doi/10.1002/14651858.CD015043.pub2/full" }
+    ],
+    category: "infectious",
+    severity: "medium"
+  },
+  {
+    id: "COVID-005",
+    patterns: [
+      /mascarilla\s+no\s+sirve/i,
+      /barbijo\s+no\s+protege/i,
+      /cubrebocas\s+causa\s+daño/i
+    ],
+    verdict: "false",
+    confidence: 0.90,
+    explanation: "Las mascarillas reducen la transmisión de enfermedades respiratorias. No causan hipoxia ni acumulan CO2. La evidencia científica respalda su uso.",
+    sources: [
+      { name: "CDC - Masks", url: "https://www.cdc.gov/coronavirus/2019-ncov/prevent-getting-sick/masks" },
+      { name: "Lancet Meta-analysis", url: "https://www.thelancet.com/journals/lancet/article/PIIS0140-6736(20)31142-9/fulltext" }
+    ],
+    category: "infectious",
+    severity: "high"
+  },
+
+  // ==================== MORE EMERGENCIES ====================
+  {
+    id: "EME-002",
+    patterns: [
+      /acv\s+se\s+cura\s+con\s+ajo/i,
+      /derrame\s+cerebral\s+natural/i,
+      /parálisis\s+se\s+cura\s+en\s+casa/i
+    ],
+    verdict: "false",
+    confidence: 0.99,
+    explanation: "Un ACV (derrame cerebral) es una EMERGENCIA MÉDICA. Cada minuto cuenta. Los tratamientos deben iniciarse en las primeras 3-4 horas para salvar tejido cerebral.",
+    sources: [
+      { name: "AHA - Stroke", url: "https://www.stroke.org/en/about-stroke/stroke-signs-and-symptoms" },
+      { name: "CDC - Stroke", url: "https://www.cdc.gov/stroke/index.htm" }
+    ],
+    category: "emergency",
+    severity: "critical"
+  },
+  {
+    id: "EME-003",
+    patterns: [
+      /asfixia\s+se\s+cura\s+con\s+bolso/i,
+      /ahogamiento\s+natural/i,
+      /paro\s+respiratorio\s+casa/i
+    ],
+    verdict: "false",
+    confidence: 0.99,
+    explanation: "La asfixia y el paro respiratorio requieren RCP inmediata y llamada a emergencias. No intentes 'remedios caseros' — la falta de oxígeno mata en minutos.",
+    sources: [
+      { name: "AHA - CPR", url: "https://cpr.heart.org/en/cpr-courses-and-kits/hands-only-cpr" },
+      { name: "Red Cross", url: "https://www.redcross.org/take-a-class/cpr/cpr-training/performing-cpr/adult-cpr" }
+    ],
+    category: "emergency",
+    severity: "critical"
+  },
+
+  // ==================== MORE MENTAL HEALTH ====================
+  {
+    id: "MH-003",
+    patterns: [
+      /esquizofrenia\s+se\s+cura\s+con\s+fe/i,
+      /psicosis\s+es\s+posesión/i,
+      /esquizofrenia\s+se\s+cura\s+con\s+oración/i
+    ],
+    verdict: "false",
+    confidence: 0.97,
+    explanation: "La esquizofrenia es un trastorno neurológico que requiere medicación antipsicótica. La oración puede dar comfort, pero NO reemplaza el tratamiento médico.",
+    sources: [
+      { name: "NIMH", url: "https://www.nimh.nih.gov/health/topics/schizophrenia" },
+      { name: "APA", url: "https://www.psychiatry.org/patients-families/schizophrenia/what-is-schizophrenia" }
+    ],
+    category: "mental-health",
+    severity: "critical"
+  },
+  {
+    id: "MH-004",
+    patterns: [
+      /trastorno\s+bipolar\s+no\s+existe/i,
+      /bipolar\s+es\s+excusa/i,
+      /bipolar\s+se\s+cura\s+con\s+yoga/i
+    ],
+    verdict: "false",
+    confidence: 0.96,
+    explanation: "El trastorno bipolar es una condición neurológica real con base genética y neuroquímica. Requiere estabilizadores del ánimo (litio, etc.) supervisados por psiquiatra.",
+    sources: [
+      { name: "NIMH - Bipolar", url: "https://www.nimh.nih.gov/health/topics/bipolar-disorder" },
+      { name: "WHO", url: "https://www.who.int/news-room/fact-sheets/detail/bipolar-disorder" }
+    ],
+    category: "mental-health",
+    severity: "high"
+  },
+
+  // ==================== MORE DANGEROUS REMEDIES ====================
+  {
+    id: "REM-004",
+    patterns: [
+      /clorofila\s+cura\s+todo/i,
+      /clorofila\s+desintoxica/i,
+      /jugo\s+verde\s+cura\s+cancer/i
+    ],
+    verdict: "misleading",
+    confidence: 0.82,
+    explanation: "La clorofila tiene propiedades antioxidantes modestas, pero NO 'cura todo' ni 'desintoxica'. No hay evidencia de que cure enfermedades graves.",
+    sources: [
+      { name: "NIH", url: "https://www.nccih.nih.gov/health/chlorophyll-and-chlorophyllin" },
+      { name: "Memorial Sloan Kettering", url: "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/chlorophyll" }
+    ],
+    category: "dangerous",
+    severity: "medium"
+  },
+  {
+    id: "REM-005",
+    patterns: [
+      /aceite\s+esencial\s+cura\s+epilepsia/i,
+      /aceite\s+cbd\s+cura\s+epilepsia/i,
+      /epilepsia\s+se\s+cura\s+con\s+marihuana/i
+    ],
+    verdict: "misleading",
+    confidence: 0.80,
+    explanation: "El CBD (epidiolex) está aprobado para ciertas formas de epilepsia resistente, pero es un medicamento controlado, NO aceite esencial genérico. La marihuana NO cura la epilepsia.",
+    sources: [
+      { name: "FDA - Epidiolex", url: "https://www.fda.gov/news-events/press-announcements/fda-approves-first-drug-composed-active-ingredient-derived-marijuana-treat-seizures" },
+      { name: "Epilepsy Foundation", url: "https://www.epilepsy.com/article/2020/3/cbd-and-epilepsy" }
+    ],
+    category: "dangerous",
+    severity: "high"
+  },
+  {
+    id: "REM-006",
+    patterns: [
+      /cloro\s+cura\s+covid/i,
+      /lavandina\s+cura\s+covid/i,
+      /injerto\s+rectal\s+de\s+cloro/i,
+      /bleach\s+cures?\s+covid/i
+    ],
+    verdict: "false",
+    confidence: 0.99,
+    explanation: "Ingerir o inyectar cloro/lejía es EXTREMADAMENTE PELIGROSO y puede ser MORTAL. No existe ninguna forma segura de usar cloro como tratamiento médico.",
+    sources: [
+      { name: "FDA - COVID-19 Fraudulent Products", url: "https://www.fda.gov/consumers/consumer-updates/caution-its-fake-fraudulent-or-misleading-dont-buy-covid-19-product" },
+      { name: "Poison Control", url: "https://www.poison.org/articles/bleach-chlorine-poisoning" }
+    ],
+    category: "dangerous",
+    severity: "critical"
+  },
+
+  // ==================== MORE ALIMENTACIÓN ====================
+  {
+    id: "ALI-003",
+    patterns: [
+      /leche\s+de\+soja\s+causa\s+ginecomastia/i,
+      /soja\s+es\s+estrogeno/i,
+      /soja\s+feminiza\s+hombres/i
+    ],
+    verdict: "false",
+    confidence: 0.90,
+    explanation: "La soja contiene fitoestrógenos débiles que NO causan ginecomastia ni feminización. Estudios en hombres que consumen soja regularmente no muestran efectos hormonales significativos.",
+    sources: [
+      { name: "Harvard Health", url: "https://www.health.harvard.edu/staying-healthy/misconceptions-about-soy" },
+      { name: "PubMed Meta-analysis", url: "https://pubmed.ncbi.nlm.nih.gov/?term=soy+phytoestrogens+men+testosterone" }
+    ],
+    category: "nutrition",
+    severity: "medium"
+  },
+  {
+    id: "ALI-004",
+    patterns: [
+      /comida\s+genéticamente\s+modificada\s+causa\s+cancer/i,
+      /alimentos\s+transgénicos\s+peligrosos/i,
+      /omg\s+causan\s+tumores/i
+    ],
+    verdict: "false",
+    confidence: 0.92,
+    explanation: "Los alimentos transgénicos (OMG) aprobados son SEGUNDS según la OMS, FAO, y NAS. No hay evidencia de que causen cancer ni daño a la salud.",
+    sources: [
+      { name: "WHO - GMOs", url: "https://www.who.int/news-room/questions-and-answers/item/nutrition-ecdl-m-issues-genetically-modified-foods" },
+      { name: "NAS", url: "https://nap.nationalacademies.org/catalog/25234/genetically-engineered-crops-experiences-and-prospects" }
+    ],
+    category: "nutrition",
+    severity: "high"
+  },
+
+  // ==================== MORE ANTIBIÓTICOS ====================
+  {
+    id: "ANT-002",
+    patterns: [
+      /antibióticos\s+para\s+virus/i,
+      /antibióticos\s+para\s+covid/i,
+      /amoxicilina\s+para\s+gripe/i
+    ],
+    verdict: "false",
+    confidence: 0.98,
+    explanation: "Los antibióticos NO funcionan contra virus como la gripe o COVID. Solo matan bacterias. Su uso innecesario crea resistencia antibiótica global.",
+    sources: [
+      { name: "WHO - AMR", url: "https://www.who.int/news-room/fact-sheets/detail/antimicrobial-resistance" },
+      { name: "CDC", url: "https://www.cdc.gov/antibiotic-use/community/index.html" }
+    ],
+    category: "antibiotics",
+    severity: "high"
+  },
+
+  // ==================== ORIGINAL CLAIMS (VAX-001 to GEN-001) ====================
   {
     id: "VAX-001",
     patterns: [
